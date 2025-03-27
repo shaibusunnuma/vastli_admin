@@ -10,7 +10,7 @@ interface DecodedToken {
 }
 
 // Paths that don't require authentication
-const publicPaths = ['/login', '/signup', '/forgot-password', '/reset-password'];
+const publicPaths = ['/sign-in', '/sign-up', '/forgot-password', '/reset-password'];
 
 // Paths that should redirect to dashboard if already authenticated
 const authOnlyPaths = [...publicPaths];
@@ -64,7 +64,7 @@ export function middleware(request: NextRequest) {
 
   // If user is not authenticated and trying to access a protected route
   if (!isAuthenticated && !isPublicPath(pathname)) {
-    const url = new URL('/login', request.url);
+    const url = new URL('/sign-in', request.url);
     url.searchParams.set('callbackUrl', encodeURI(pathname));
     return NextResponse.redirect(url);
   }
@@ -88,7 +88,8 @@ export const config = {
      * 3. /_static (static files)
      * 4. /_vercel (Vercel internals)
      * 5. /favicon.ico, /robots.txt (common static files)
+     * 6. All files in the public directory (images, etc.)
      */
-    '/((?!api|_next|_static|_vercel|favicon.ico|robots.txt).*)',
+    '/((?!api|_next|_static|_vercel|favicon.ico|robots.txt|.*\.png|.*\.jpg|.*\.jpeg|.*\.gif|.*\.svg|.*\.ico).*)',
   ],
 };
