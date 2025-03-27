@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { Account } from "~/types/account.types";
-import { axiosBaseQuery } from "~/lib/baseQuery";
+import { Account } from "@/types/account.types";
+import { axiosBaseQuery } from "@/lib/baseQuery";
 
 export const accountApiSlice = createApi({
   reducerPath: "accountApi",

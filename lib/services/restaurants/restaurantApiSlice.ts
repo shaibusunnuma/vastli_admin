@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { Restaurant, Review } from "@/types/restaurants";
-import { axiosBaseQuery } from "~/lib/baseQuery";
+import { axiosBaseQuery } from "@/lib/baseQuery";
 import { providesList } from "../../common";
 
 export const restaurantApiSlice = createApi({

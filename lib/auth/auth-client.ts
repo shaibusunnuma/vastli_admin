@@ -1,5 +1,5 @@
 import { SignInParams } from "@/types/auth.types";
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { SERVER_URL } from "@/constants";
 import ApiErrorHandler from "../error-handler";
 import logger from "@/lib/logger";
