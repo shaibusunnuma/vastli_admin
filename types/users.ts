@@ -28,6 +28,10 @@ export interface User {
 export interface Customer extends User {
   visits: number;
   lastVisit: string;
+  reservations?: number;
+  lastActive?: string;
+  imageUrl?: string;
+  restaurants?: string[];
 }
 export interface Server extends User {}
 
