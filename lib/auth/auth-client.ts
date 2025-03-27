@@ -5,7 +5,7 @@ import ApiErrorHandler from "../error-handler";
 import logger from "@/lib/logger";
 
 const client = axios.create({
-  baseURL: `${SERVER_URL}/auth/`,
+  baseURL: `${SERVER_URL}/auth/admin/`,
   headers: {
     "Content-Type": "application/json",
   },

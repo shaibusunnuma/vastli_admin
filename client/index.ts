@@ -7,6 +7,7 @@ const axiosClient = axios.create({
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
   },
+  withCredentials: true, // This is crucial for sending cookies with requests
 });
 
 export default axiosClient;
