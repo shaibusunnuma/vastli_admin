@@ -5,7 +5,7 @@ import { providesList } from "../../common";
 
 export const customerApiSlice = createApi({
   reducerPath: "customerApi",
-  baseQuery: axiosBaseQuery({ baseUrl: "users" }),
+  baseQuery: axiosBaseQuery({ baseUrl: "customers" }),
   tagTypes: ["Customers"],
   endpoints: (build) => ({
     getCustomers: build.query<UserResponse<Customer>, { filter: object; query?: string }>({

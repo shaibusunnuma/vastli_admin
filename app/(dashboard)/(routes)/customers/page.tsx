@@ -6,7 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Search, Filter, Download, User, Loader2 } from "lucide-react";
 import { useGetCustomersQuery } from "@/lib/services/customers/customerApiSlice";
-import { Customer } from "@/types/users";
 
 export default function CustomersPage() {
   const [searchQuery, setSearchQuery] = useState("");
