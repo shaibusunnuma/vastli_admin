@@ -56,7 +56,7 @@ export default function LoginForm() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Email address" type="email" {...field} />
+                  <Input placeholder="Enter your vastli email" type="email" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -79,12 +79,6 @@ export default function LoginForm() {
           />
 
           <Button type="submit">Submit</Button>
-        </div>
-        <div className="text-center text-sm">
-          Don&apos;t have an account?{" "}
-          <a href="/sign-up" className="underline underline-offset-4">
-            Sign up
-          </a>
         </div>
       </form>
     </Form>
