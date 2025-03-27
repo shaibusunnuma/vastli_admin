@@ -6,6 +6,7 @@ export interface Restaurant {
   name: string;
   webId?: string;
   description?: string;
+  cuisine: string;
   address?: Address;
   contact?: {
     phone?: string;
@@ -16,6 +17,9 @@ export interface Restaurant {
     weekdays?: string;
   };
   status: UserStatus;
+  priceRange: string;
+  reservationInterval: number;
+  capacity: number;
   ownerId: string;
   createdAt: string;
   updatedAt: string;
