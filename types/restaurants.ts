@@ -1,3 +1,5 @@
+import { UserStatus } from "./users";
+
 export interface Restaurant {
   id: string;
   accountId: string;
@@ -13,7 +15,10 @@ export interface Restaurant {
     weekends?: string;
     weekdays?: string;
   };
+  status: UserStatus;
   ownerId: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface Address {

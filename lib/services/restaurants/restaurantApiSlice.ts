@@ -10,8 +10,7 @@ export const restaurantApiSlice = createApi({
   endpoints: (build) => ({
     getRestaurants: build.query<Restaurant[], Partial<Restaurant>>({
       query: (filter) => ({ url: "", params: filter }),
-      providesTags: (result, error, { accountId }) =>
-        providesList(result, "Restaurants", accountId),
+      providesTags: (result) => providesList(result, "Restaurants"),
     }),
 
     getRestaurantById: build.query<Restaurant, string>({

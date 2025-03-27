@@ -68,7 +68,10 @@ export const reservationApiSlice = createApi({
           patchResult.undo();
         }
       },
-      invalidatesTags: (result, error, { id }) => [{ type: "Reservations", id }, { type: "Reservations", id: "LIST" }],
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Reservations", id },
+        { type: "Reservations", id: "LIST" },
+      ],
     }),
 
     assignTable: build.mutation<Reservation, { reservationId: string; table: TableIdAndDate }>({
@@ -87,8 +90,8 @@ export const reservationApiSlice = createApi({
 
 export const {
   useGetReservationsQuery,
-  useGetReservationByIdQuery,
   useGetReservationByFilterQuery,
+  useGetReservationByIdQuery,
   useAddReservationMutation,
   useUpdateReservationMutation,
   useAssignTableMutation,
