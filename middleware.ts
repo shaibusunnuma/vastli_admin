@@ -1,5 +1,13 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { jwtDecode } from 'jwt-decode';
+
+interface DecodedToken {
+  exp: number;
+  userId: string;
+  role: string;
+  [key: string]: any;
+}
 
 // Paths that don't require authentication
 const publicPaths = ['/login', '/signup', '/forgot-password', '/reset-password'];
@@ -21,8 +29,38 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
   // Get auth token from cookies
-  const authToken = request.cookies.get('access_token')?.value;
-  const isAuthenticated = !!authToken;
+  const accessToken = request.cookies.get('access_token')?.value;
+  const refreshToken = request.cookies.get('refresh_token')?.value;
+  
+  // Check if access token exists and is valid
+  let isAuthenticated = false;
+  let tokenExpired = false;
+  
+  if (accessToken) {
+    try {
+      // Decode the JWT token to check expiration
+      const decoded = jwtDecode<DecodedToken>(accessToken);
+      const currentTime = Math.floor(Date.now() / 1000);
+      
+      if (decoded.exp > currentTime) {
+        // Token is still valid
+        isAuthenticated = true;
+      } else {
+        // Token has expired
+        tokenExpired = true;
+      }
+    } catch (error) {
+      // Invalid token format
+      tokenExpired = true;
+    }
+  }
+  
+  // If token is expired but refresh token exists, let the client handle refresh
+  // The auth client will handle token refresh on API calls
+  if (tokenExpired && refreshToken) {
+    // Allow the request to proceed - client-side auth will handle refresh
+    isAuthenticated = true;
+  }
 
   // If user is not authenticated and trying to access a protected route
   if (!isAuthenticated && !isPublicPath(pathname)) {
