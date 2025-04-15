@@ -3,20 +3,20 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { ArrowLeft } from "lucide-react";
 import OnboardingStep from "@/views/restaurants/onboard/onboarding-step";
 import BasicInfo from "./basic-info";
 import ContactInfo from "./contact-info";
 import MenuSettings from "./menu-settings";
 import BillingInfo from "./billing-info";
 import InfoReview from "./info-review";
+import { Restaurant } from "@/types/restaurants";
+import { defaultRestaurant } from "./schemas";
 
 export default function OnboardRestaurantPage() {
   const [currentStep, setCurrentStep] = useState("basic-info");
+  const [restaurantData, setRestaurantData] = useState<Partial<Restaurant>>(defaultRestaurant);
 
   const handleNext = () => {
     if (currentStep === "basic-info") setCurrentStep("contact-info");
@@ -48,11 +48,11 @@ export default function OnboardRestaurantPage() {
 
       <Tabs value={currentStep} className="w-full">
         <TabsContent value="basic-info">
-          <BasicInfo handleNext={handleNext} />
+          <BasicInfo restaurant={restaurantData} setRestaurant={setRestaurantData} setCurrentStep= {setCurrentStep} />
         </TabsContent>
 
         <TabsContent value="contact-info">
-          <ContactInfo handleNext={handleNext} handlePrevious={handlePrevious} />
+          <ContactInfo restaurant={restaurantData} setRestaurant={setRestaurantData} setCurrentStep= {setCurrentStep} />
         </TabsContent>
 
         <TabsContent value="menu-settings">

@@ -1,3 +1,5 @@
+import { Restaurant } from "@/types/restaurants";
+import { UserStatus } from "@/types/users";
 import * as z from "zod";
 
 
@@ -14,11 +16,8 @@ export type AddressType = z.infer<typeof AddressSchema>;
 
 export const BasicInfoSchema = z.object({
   name: z.string().min(1, { message: "Restaurant name is required" }),
-  type: z.string().optional(),
+  cuisine: z.string().optional(),
   description: z.string().optional(),
-  webId: z.string().refine((val) => /^[a-zA-Z0-9-]+$/.test(val), {
-    message: "webId must be a valid URL path segment, e.g., '/coco-eats'",
-  }),
   address: AddressSchema,
 });
 
@@ -38,3 +37,43 @@ export const ContactSchema = z.object({
 });
 
 export type ContactType = z.infer<typeof ContactSchema>;
+
+
+export const defaultRestaurant: Omit<Restaurant, "id" | "accountId" | "createdAt" | "updatedAt"> = {
+  name: "",
+  cuisine: "",
+  status: UserStatus.PENDING, 
+  webId: "",
+  imageUrl: "",
+  logoUrl: "",
+  description: "",
+  reservationSettings: {
+    allowSelfBookingManagement: true,
+    timeSlotInterval: 30, 
+    maxBookingDaysInAdvance: 90,
+    minGuestsPerReservation: 1,
+    maxGuestsPerReservation: 10,
+    autoConfirmReservations: true,
+  },
+  address: {
+    street: "",
+    city: "",
+    state: "",
+    country: "", 
+    postalCode: "",
+    googleMapsLink: "",
+  },
+  contact: {
+    phone: "",
+    email: "",
+  },
+  operatingHours: {
+    weekends: "", 
+    weekdays: "",
+    useIndividualDaySettings: false,
+  },
+  priceRange: "$$",
+  capacity: "", 
+  ownerId: "",
+};
+
