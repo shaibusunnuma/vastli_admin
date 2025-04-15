@@ -3,7 +3,6 @@ import { Restaurant } from "./restaurants";
 export interface Account {
   id: string;
   contact: Contact;
-  restaurants: Restaurant[];
   preferences: Preferences;
   createdAt: Date;
   updatedAt: Date;

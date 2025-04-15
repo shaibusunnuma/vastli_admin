@@ -21,8 +21,27 @@ export interface User {
   phone: string;
   role: UserRole;
   status: UserStatus;
+  primaryEmailAddress: EmailAddress;
+  primaryPhoneNumber: PhoneNumber;
+  emailAddresses: EmailAddress[];
+  phoneNumbers: PhoneNumber[];
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface EmailAddress {
+  emailAddress: string;
+  verified: boolean;
+}
+export interface PhoneNumber {
+  phoneNumber: string;
+  verified: boolean;
+}
+
+export interface Operator extends User {
+  accountId: string;
+  imageUrl: string | null;
+  inviter?: string;
 }
 
 export interface Customer extends User {

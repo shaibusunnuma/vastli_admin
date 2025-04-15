@@ -1,17 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Check } from "lucide-react";
-import Link from "next/link";
 import { Restaurant, Step } from "@/types/restaurants";
+import { useAddRestaurantMutation } from "@/lib/services/restaurants/restaurantApiSlice";
+import logger from "@/lib/logger";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface Props {
   restaurant: Partial<Restaurant>;
@@ -20,23 +16,32 @@ interface Props {
 }
 
 function InfoReview({ restaurant, setRestaurant, setCurrentStep }: Props) {
-  const {
-    name,
-    cuisine,
-    priceRange,
-    capacity,
-    address,
-    contact,
-    reservationSettings,
-  } = restaurant;
+  const router = useRouter();
+  const { name, cuisine, priceRange, capacity, address, contact, reservationSettings } = restaurant;
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [createRestaurant] = useAddRestaurantMutation();
+
+  const submit = async () => {
+    try {
+      setIsLoading(true);
+      await createRestaurant(restaurant);
+      toast.success("Restaurant created successfully!");
+      // router.push("/restaurants");
+    } catch (error: any) {
+      logger.error(error);
+      const msg = error.data.message || "Error creating customer";
+      toast.error(msg);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>Review & Submit</CardTitle>
-        <CardDescription>
-          Review the restaurant information before submitting
-        </CardDescription>
+        <CardDescription>Review the restaurant information before submitting</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Basic Info */}
@@ -54,9 +59,7 @@ function InfoReview({ restaurant, setRestaurant, setCurrentStep }: Props) {
             <div className="col-span-2">
               <span className="text-gray-500">Address:</span>
               <span className="ml-2">
-                {address
-                  ? `${address.street || ""}, ${address.city || ""}, ${address.state || ""}, ${address.country || ""}`
-                  : "—"}
+                {address ? `${address.street || ""}, ${address.city || ""}, ${address.state || ""}, ${address.country || ""}` : "—"}
               </span>
             </div>
           </div>
@@ -91,17 +94,12 @@ function InfoReview({ restaurant, setRestaurant, setCurrentStep }: Props) {
             </div>
             <div>
               <span className="text-gray-500">Time Slot Interval:</span>
-              <span className="ml-2">
-                {reservationSettings?.timeSlotInterval
-                  ? `${reservationSettings.timeSlotInterval} minutes`
-                  : "—"}
-              </span>
+              <span className="ml-2">{reservationSettings?.timeSlotInterval ? `${reservationSettings.timeSlotInterval} minutes` : "—"}</span>
             </div>
             <div>
               <span className="text-gray-500">Guests per Reservation:</span>
               <span className="ml-2">
-                {reservationSettings?.minGuestsPerReservation ?? "—"} -{" "}
-                {reservationSettings?.maxGuestsPerReservation ?? "—"}
+                {reservationSettings?.minGuestsPerReservation ?? "—"} - {reservationSettings?.maxGuestsPerReservation ?? "—"}
               </span>
             </div>
           </div>
@@ -124,14 +122,9 @@ function InfoReview({ restaurant, setRestaurant, setCurrentStep }: Props) {
 
         {/* Terms */}
         <div className="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            id="terms"
-            className="h-4 w-4 rounded border-gray-300 text-violet-600 focus:ring-violet-600"
-          />
+          <input type="checkbox" id="terms" className="h-4 w-4 rounded border-gray-300 text-violet-600 focus:ring-violet-600" />
           <Label htmlFor="terms" className="text-sm">
-            I confirm that all information provided is accurate and I agree to
-            the terms and conditions
+            I confirm that all information provided is accurate and I agree to the terms and conditions
           </Label>
         </div>
       </CardContent>
@@ -140,12 +133,10 @@ function InfoReview({ restaurant, setRestaurant, setCurrentStep }: Props) {
           <ArrowLeft className="mr-2 h-4 w-4" />
           Previous
         </Button>
-        <Link href="/restaurants">
-          <Button>
-            Submit
-            <Check className="ml-2 h-4 w-4" />
-          </Button>
-        </Link>
+        <Button onClick={submit}>
+          {isLoading ? "Submitting..." : "Submit"}
+          <Check className="ml-2 h-4 w-4" />
+        </Button>
       </CardFooter>
     </Card>
   );
