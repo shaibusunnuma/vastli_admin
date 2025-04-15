@@ -25,11 +25,8 @@ export default function LoginForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      console.log(values);
       const signInAttempt = await signIn.create(values);
-      console.log(signInAttempt);
       if (signInAttempt.status === "complete") {
-        console.log("loggin in");
         form.reset();
         router.push("/reservations");
       }
