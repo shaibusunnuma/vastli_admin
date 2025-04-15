@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardHeader, CardContent, CardDescription, CardFooter, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { PhoneInput } from "@/components/ui/phone-input";
 
 interface Props {
   restaurant: Partial<Restaurant>;
@@ -24,13 +25,13 @@ function BasicInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
   });
   const onSubmit = (data: BasicInfoType) => {
     setRestaurant({ ...restaurant, ...data });
+    console.log(data);
     setCurrentStep("3");
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={() => setCurrentStep("3")}>
-        {/* <form onSubmit={form.handleSubmit(onSubmit)}> */}
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card>
           <CardHeader>
             <CardTitle>Basic Information</CardTitle>
@@ -107,7 +108,7 @@ function BasicInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
                   <FormItem>
                     <FormLabel>Phone Number</FormLabel>
                     <FormControl>
-                      <Input placeholder="Restaurant phone number" {...field} />
+                      <PhoneInput placeholder="Enter phone" {...field} defaultCountry="GH" countries={["GH"]} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -118,7 +119,7 @@ function BasicInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
                 name="contact.email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Public Email</FormLabel>
+                    <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input type="email" placeholder="Restaurant public email" {...field} />
                     </FormControl>

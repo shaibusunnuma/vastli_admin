@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardHeader, CardContent, CardDescription, CardFooter, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { PhoneInput } from "@/components/ui/phone-input";
 interface Props {
   restaurant: Partial<Restaurant>;
   setRestaurant: React.Dispatch<React.SetStateAction<Partial<Restaurant>>>;
@@ -18,26 +19,16 @@ interface Props {
 function OwnerInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
   const form = useForm<OwnerInfoType>({
     resolver: zodResolver(OwnerInfoSchema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      phone: "",
-      email: "",
-    },
   });
 
   const onSubmit = (data: OwnerInfoType) => {
-    setCurrentStep("3"); // Navigate to the next step
-  };
-
-  const handlePrevious = () => {
-    setCurrentStep("1");
+    console.log(data);
+    setCurrentStep("2");
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={() => setCurrentStep("2")}>
-        {/* <form onSubmit={form.handleSubmit(onSubmit)}> */}
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card>
           <CardHeader>
             <CardTitle>Owner Information</CardTitle>
@@ -48,6 +39,7 @@ function OwnerInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
               <FormField
                 control={form.control}
                 name="firstName"
+                defaultValue=""
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>First Name*</FormLabel>
@@ -61,6 +53,7 @@ function OwnerInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
               <FormField
                 control={form.control}
                 name="lastName"
+                defaultValue=""
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Last Name*</FormLabel>
@@ -76,11 +69,12 @@ function OwnerInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
               <FormField
                 control={form.control}
                 name="phone"
+                defaultValue=""
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Phone*</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter phone" {...field} />
+                      <PhoneInput placeholder="Enter phone" {...field} defaultCountry="GH" countries={["GH"]} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

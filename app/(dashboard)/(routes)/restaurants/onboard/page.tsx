@@ -32,7 +32,7 @@ export default function OnboardRestaurantPage() {
       <OnboardingStep currentStep={currentStep} />
 
       <Tabs value={currentStep} className="w-full">
-      <TabsContent value="1">
+        <TabsContent value="1">
           <OwnerInfo restaurant={restaurantData} setRestaurant={setRestaurantData} setCurrentStep={setCurrentStep} />
         </TabsContent>
         <TabsContent value="2">

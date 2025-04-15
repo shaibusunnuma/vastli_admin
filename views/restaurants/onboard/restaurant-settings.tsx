@@ -44,7 +44,7 @@ function RestaurantSettings({ restaurant, setRestaurant, setCurrentStep }: Props
       reservationSettings: { ...prev.reservationSettings, ...data.reservationSettings },
       operatingHours: { ...prev.operatingHours, ...data.operatingHours },
     }));
-    setCurrentStep("3"); // Or your next step
+    setCurrentStep("4");
   };
 
   const applyWeekdaysToAll = async () => {
@@ -74,23 +74,17 @@ function RestaurantSettings({ restaurant, setRestaurant, setCurrentStep }: Props
 
   return (
     <Form {...form}>
-      <form onSubmit={() => setCurrentStep("4")}>
-      {/* <form onSubmit={form.handleSubmit(onSubmit)}> */}
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card>
           <CardHeader>
             <CardTitle>Restaurant Settings & Hours</CardTitle>
             <CardDescription>Configure reservation settings and operating hours.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-8">
-            {" "}
-            {/* Increased spacing */}
-            {/* Reservation Settings Section */}
             <div className="space-y-4">
               <h3 className="text-lg font-medium">Reservation Settings</h3>
               <Separator />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                {" "}
-                {/* Use grid for layout */}
                 <FormField
                   control={form.control}
                   name="reservationSettings.timeSlotInterval"
@@ -99,14 +93,7 @@ function RestaurantSettings({ restaurant, setRestaurant, setCurrentStep }: Props
                       <FormLabel>Time Slot Interval (minutes)</FormLabel>
                       <FormControl>
                         {/* Use web NumberInput */}
-                        <NumberInput
-                          min={15} // From schema
-                          max={120} // From schema
-                          interval={15} // Example interval step
-                          value={field.value}
-                          onChange={field.onChange}
-                          onBlur={field.onBlur}
-                        />
+                        <NumberInput min={15} max={120} interval={15} value={field.value} onChange={field.onChange} onBlur={field.onBlur} />
                       </FormControl>
                       <FormDescription>Choose between 15-120 minutes.</FormDescription>
                       <FormMessage />
@@ -120,14 +107,7 @@ function RestaurantSettings({ restaurant, setRestaurant, setCurrentStep }: Props
                     <FormItem>
                       <FormLabel>Max Days in Advance</FormLabel>
                       <FormControl>
-                        <NumberInput
-                          min={1} // From schema
-                          max={90} // From schema
-                          interval={1}
-                          value={field.value}
-                          onChange={field.onChange}
-                          onBlur={field.onBlur}
-                        />
+                        <NumberInput min={1} max={90} interval={1} value={field.value} onChange={field.onChange} onBlur={field.onBlur} />
                       </FormControl>
                       <FormDescription>How many days ahead can customers book (1-90).</FormDescription>
                       <FormMessage />
@@ -164,14 +144,7 @@ function RestaurantSettings({ restaurant, setRestaurant, setCurrentStep }: Props
                     <FormItem>
                       <FormLabel>Max Guests per Reservation</FormLabel>
                       <FormControl>
-                        <NumberInput
-                          min={1} // From schema
-                          max={50} // From schema
-                          interval={1}
-                          value={field.value}
-                          onChange={field.onChange}
-                          onBlur={field.onBlur}
-                        />
+                        <NumberInput min={1} max={50} interval={1} value={field.value} onChange={field.onChange} onBlur={field.onBlur} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -316,7 +289,7 @@ function RestaurantSettings({ restaurant, setRestaurant, setCurrentStep }: Props
             </div>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button type="button" variant="outline" onClick={()=>setCurrentStep("2")}>
+            <Button type="button" variant="outline" onClick={() => setCurrentStep("2")}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Previous
             </Button>
