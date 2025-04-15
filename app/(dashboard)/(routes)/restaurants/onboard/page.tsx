@@ -7,7 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import OnboardingStep from "@/views/restaurants/onboard/onboarding-step";
 import BasicInfo from "@/views/restaurants/onboard/basic-info";
 import OwnerInfo from "@/views/restaurants/onboard/owner-info";
-import MenuSettings from "@/views/restaurants/onboard/menu-settings";
+import MenuSettings from "@/views/restaurants/onboard/restaurant-settings";
 import BillingInfo from "@/views/restaurants/onboard/billing-info";
 import InfoReview from "@/views/restaurants/onboard/info-review";
 import { Restaurant } from "@/types/restaurants";
@@ -19,15 +19,15 @@ export default function OnboardRestaurantPage() {
 
   const handleNext = () => {
     if (currentStep === "basic-info") setCurrentStep("owner-info");
-    else if (currentStep === "owner-info") setCurrentStep("menu-settings");
-    else if (currentStep === "menu-settings") setCurrentStep("billing-info");
+    else if (currentStep === "owner-info") setCurrentStep("restaurant-settings");
+    else if (currentStep === "restaurant-settings") setCurrentStep("billing-info");
     else if (currentStep === "billing-info") setCurrentStep("review");
   };
 
   const handlePrevious = () => {
     if (currentStep === "owner-info") setCurrentStep("basic-info");
-    else if (currentStep === "menu-settings") setCurrentStep("owner-info");
-    else if (currentStep === "billing-info") setCurrentStep("menu-settings");
+    else if (currentStep === "restaurant-settings") setCurrentStep("owner-info");
+    else if (currentStep === "billing-info") setCurrentStep("restaurant-settings");
     else if (currentStep === "review") setCurrentStep("billing-info");
   };
 
@@ -54,7 +54,7 @@ export default function OnboardRestaurantPage() {
           <OwnerInfo restaurant={restaurantData} setRestaurant={setRestaurantData} setCurrentStep={setCurrentStep} />
         </TabsContent>
 
-        <TabsContent value="menu-settings">
+        <TabsContent value="restaurant-settings">
           <MenuSettings handleNext={handleNext} handlePrevious={handlePrevious} />
         </TabsContent>
 

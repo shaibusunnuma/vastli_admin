@@ -27,7 +27,7 @@ function OwnerInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
   });
 
   const onSubmit = (data: OwnerInfoType) => {
-    setCurrentStep("menu-settings"); // Navigate to the next step
+    setCurrentStep("restaurant-settings"); // Navigate to the next step
   };
 
   const handlePrevious = () => {
@@ -36,7 +36,8 @@ function OwnerInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={()=>setCurrentStep("restaurant-settings")}>
+      {/* <form onSubmit={form.handleSubmit(onSubmit)}> */}
         <Card>
           <CardHeader>
             <CardTitle>Owner Information</CardTitle>

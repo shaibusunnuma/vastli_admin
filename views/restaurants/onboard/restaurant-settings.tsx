@@ -3,17 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 interface Props {
   handleNext: () => void;
   handlePrevious: () => void;
 }
-function MenuSettings({ handleNext, handlePrevious }: Props) {
+function RestaurantSettings({ handleNext, handlePrevious }: Props) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Menu Settings</CardTitle>
+        <CardTitle>Restaurant Settings</CardTitle>
         <CardDescription>Configure the restaurant's menu and reservation settings</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -61,4 +61,4 @@ function MenuSettings({ handleNext, handlePrevious }: Props) {
   );
 }
 
-export default MenuSettings;
+export default RestaurantSettings;
