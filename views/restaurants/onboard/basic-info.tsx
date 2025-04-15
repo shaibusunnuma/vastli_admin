@@ -1,19 +1,18 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"; // Import Form components
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { Restaurant } from "@/types/restaurants";
+import { Restaurant, Step } from "@/types/restaurants";
 import { BasicInfoSchema, BasicInfoType } from "./schemas";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Card, CardHeader, CardContent, CardDescription, CardFooter, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   restaurant: Partial<Restaurant>;
   setRestaurant: React.Dispatch<React.SetStateAction<Partial<Restaurant>>>;
-  setCurrentStep: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentStep: React.Dispatch<React.SetStateAction<Step>>;
 }
 
 function BasicInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
@@ -25,13 +24,13 @@ function BasicInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
   });
   const onSubmit = (data: BasicInfoType) => {
     setRestaurant({ ...restaurant, ...data });
-    setCurrentStep("owner-info");
+    setCurrentStep("3");
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={()=>setCurrentStep("owner-info")}>
-      {/* <form onSubmit={form.handleSubmit(onSubmit)}> */}
+      <form onSubmit={() => setCurrentStep("3")}>
+        {/* <form onSubmit={form.handleSubmit(onSubmit)}> */}
         <Card>
           <CardHeader>
             <CardTitle>Basic Information</CardTitle>
@@ -213,7 +212,11 @@ function BasicInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
             />
           </CardContent>
           <CardFooter className="flex justify-between">
-            <div />
+            <Button type="button" variant="ghost" onClick={() => setCurrentStep("1")}>
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Previous
+            </Button>
+
             <Button type="submit">
               Next
               <ArrowRight className="ml-2 h-4 w-4" />

@@ -10,26 +10,12 @@ import OwnerInfo from "@/views/restaurants/onboard/owner-info";
 import RestaurantSettings from "@/views/restaurants/onboard/restaurant-settings";
 import BillingInfo from "@/views/restaurants/onboard/billing-info";
 import InfoReview from "@/views/restaurants/onboard/info-review";
-import { Restaurant } from "@/types/restaurants";
+import { Restaurant, Step } from "@/types/restaurants";
 import { defaultRestaurant } from "@/views/restaurants/onboard/schemas";
 
 export default function OnboardRestaurantPage() {
-  const [currentStep, setCurrentStep] = useState("basic-info");
+  const [currentStep, setCurrentStep] = useState<Step>("1");
   const [restaurantData, setRestaurantData] = useState<Partial<Restaurant>>(defaultRestaurant);
-
-  const handleNext = () => {
-    if (currentStep === "basic-info") setCurrentStep("owner-info");
-    else if (currentStep === "owner-info") setCurrentStep("restaurant-settings");
-    else if (currentStep === "restaurant-settings") setCurrentStep("billing-info");
-    else if (currentStep === "billing-info") setCurrentStep("review");
-  };
-
-  const handlePrevious = () => {
-    if (currentStep === "owner-info") setCurrentStep("basic-info");
-    else if (currentStep === "restaurant-settings") setCurrentStep("owner-info");
-    else if (currentStep === "billing-info") setCurrentStep("restaurant-settings");
-    else if (currentStep === "review") setCurrentStep("billing-info");
-  };
 
   return (
     <div className="flex flex-col gap-5">
@@ -46,24 +32,22 @@ export default function OnboardRestaurantPage() {
       <OnboardingStep currentStep={currentStep} />
 
       <Tabs value={currentStep} className="w-full">
-        <TabsContent value="basic-info">
-          <BasicInfo restaurant={restaurantData} setRestaurant={setRestaurantData} setCurrentStep={setCurrentStep} />
-        </TabsContent>
-
-        <TabsContent value="owner-info">
+      <TabsContent value="1">
           <OwnerInfo restaurant={restaurantData} setRestaurant={setRestaurantData} setCurrentStep={setCurrentStep} />
         </TabsContent>
-
-        <TabsContent value="restaurant-settings">
+        <TabsContent value="2">
+          <BasicInfo restaurant={restaurantData} setRestaurant={setRestaurantData} setCurrentStep={setCurrentStep} />
+        </TabsContent>
+        <TabsContent value="3">
           <RestaurantSettings restaurant={restaurantData} setRestaurant={setRestaurantData} setCurrentStep={setCurrentStep} />
         </TabsContent>
 
-        <TabsContent value="billing-info">
+        {/* <TabsContent value="4">
           <BillingInfo handleNext={handleNext} handlePrevious={handlePrevious} />
-        </TabsContent>
+        </TabsContent> */}
 
-        <TabsContent value="review">
-          <InfoReview handlePrevious={handlePrevious} />
+        <TabsContent value="4">
+          <InfoReview restaurant={restaurantData} setRestaurant={setRestaurantData} setCurrentStep={setCurrentStep} />
         </TabsContent>
       </Tabs>
     </div>

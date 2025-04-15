@@ -12,7 +12,7 @@ import { useGetReservationByFilterQuery } from "@/lib/services/reservations/rese
 export default function Row({ restaurant }: { restaurant: Restaurant }) {
   const {
     data: customers,
-    error: fetchError,
+    error,
     isLoading,
   } = useGetCustomersQuery({
     filter: { restaurants: [restaurant.id], page: 1, limit: 10 },
@@ -20,8 +20,6 @@ export default function Row({ restaurant }: { restaurant: Restaurant }) {
   const { data: reservations, isLoading: reservationsLoading } = useGetReservationByFilterQuery({
     restaurantId: restaurant.id,
   });
-
-  console.log(customers?.data?.length);
 
   return (
     <TableRow key={restaurant.id}>

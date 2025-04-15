@@ -1,14 +1,12 @@
 import React from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Card, CardHeader, CardContent, CardDescription, CardFooter, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { Restaurant } from "@/types/restaurants";
+import { Restaurant, Step } from "@/types/restaurants";
 import { SettingsAndHoursSchema, SettingsAndHoursType, OperatingHoursType } from "./schemas"; // Adjust path
 import NumberInput from "@/components/number-input";
 import { TimeIntervalInput } from "@/components/TimeIntervalInput";
@@ -18,7 +16,7 @@ import WeekdayInput from "./week-day-input";
 interface Props {
   restaurant: Partial<Restaurant>;
   setRestaurant: React.Dispatch<React.SetStateAction<Partial<Restaurant>>>;
-  setCurrentStep: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentStep: React.Dispatch<React.SetStateAction<Step>>;
 }
 
 function RestaurantSettings({ restaurant, setRestaurant, setCurrentStep }: Props) {
@@ -46,16 +44,13 @@ function RestaurantSettings({ restaurant, setRestaurant, setCurrentStep }: Props
       reservationSettings: { ...prev.reservationSettings, ...data.reservationSettings },
       operatingHours: { ...prev.operatingHours, ...data.operatingHours },
     }));
-    setCurrentStep("confirmation"); // Or your next step
+    setCurrentStep("3"); // Or your next step
   };
 
-  // Helper functions using react-hook-form's setValue
   const applyWeekdaysToAll = async () => {
     const weekdaysValue = watch("operatingHours.weekdays");
-    // Optionally trigger validation for the source field first
     const isValid = await trigger("operatingHours.weekdays");
     if (!isValid || !weekdaysValue) {
-      // Optionally show a toast or message indicating the source value is invalid/empty
       console.warn("Cannot apply empty or invalid weekday hours.");
       return;
     }
@@ -68,10 +63,8 @@ function RestaurantSettings({ restaurant, setRestaurant, setCurrentStep }: Props
 
   const applyWeekendsToAll = async () => {
     const weekendsValue = watch("operatingHours.weekends");
-    // Optionally trigger validation for the source field first
     const isValid = await trigger("operatingHours.weekends");
     if (!isValid || !weekendsValue) {
-      // Optionally show a toast or message indicating the source value is invalid/empty
       console.warn("Cannot apply empty or invalid weekend hours.");
       return;
     }
@@ -81,7 +74,8 @@ function RestaurantSettings({ restaurant, setRestaurant, setCurrentStep }: Props
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={() => setCurrentStep("4")}>
+      {/* <form onSubmit={form.handleSubmit(onSubmit)}> */}
         <Card>
           <CardHeader>
             <CardTitle>Restaurant Settings & Hours</CardTitle>
@@ -322,7 +316,7 @@ function RestaurantSettings({ restaurant, setRestaurant, setCurrentStep }: Props
             </div>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button type="button" variant="outline" onClick={()=>setCurrentStep("owner-info")}>
+            <Button type="button" variant="outline" onClick={()=>setCurrentStep("2")}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Previous
             </Button>

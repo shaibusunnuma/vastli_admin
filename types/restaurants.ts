@@ -61,3 +61,5 @@ export interface Review {
   rating: number;
   date: string;
 }
+
+export type Step = "1" | "2" | "3" | "4";

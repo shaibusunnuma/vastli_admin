@@ -1,18 +1,18 @@
 import React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import { Restaurant } from "@/types/restaurants";
+import { ArrowRight } from "lucide-react";
+import { Restaurant, Step } from "@/types/restaurants";
 import { OwnerInfoSchema, OwnerInfoType } from "./schemas";
-
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Card, CardHeader, CardContent, CardDescription, CardFooter, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 interface Props {
   restaurant: Partial<Restaurant>;
   setRestaurant: React.Dispatch<React.SetStateAction<Partial<Restaurant>>>;
-  setCurrentStep: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentStep: React.Dispatch<React.SetStateAction<Step>>;
 }
 
 function OwnerInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
@@ -27,17 +27,17 @@ function OwnerInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
   });
 
   const onSubmit = (data: OwnerInfoType) => {
-    setCurrentStep("restaurant-settings"); // Navigate to the next step
+    setCurrentStep("3"); // Navigate to the next step
   };
 
   const handlePrevious = () => {
-    setCurrentStep("basic-info");
+    setCurrentStep("1");
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={()=>setCurrentStep("restaurant-settings")}>
-      {/* <form onSubmit={form.handleSubmit(onSubmit)}> */}
+      <form onSubmit={() => setCurrentStep("2")}>
+        {/* <form onSubmit={form.handleSubmit(onSubmit)}> */}
         <Card>
           <CardHeader>
             <CardTitle>Owner Information</CardTitle>
@@ -102,10 +102,7 @@ function OwnerInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
             </div>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button type="button" variant="ghost" onClick={handlePrevious}>
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Previous
-            </Button>
+            <div />
             <Button type="submit">
               Next
               <ArrowRight className="ml-2 h-4 w-4" />

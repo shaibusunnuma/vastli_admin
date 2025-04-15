@@ -1,15 +1,17 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { ArrowLeft, Check } from "lucide-react";
 import Link from "next/link";
+import { Restaurant, Step } from "@/types/restaurants";
 
 interface Props {
-  handlePrevious: () => void;
+  restaurant: Partial<Restaurant>;
+  setRestaurant: React.Dispatch<React.SetStateAction<Partial<Restaurant>>>;
+  setCurrentStep: React.Dispatch<React.SetStateAction<Step>>;
 }
-function InfoReview({ handlePrevious }: Props) {
+function InfoReview({ restaurant, setRestaurant, setCurrentStep }: Props) {
   return (
     <Card>
       <CardHeader>
@@ -101,7 +103,7 @@ function InfoReview({ handlePrevious }: Props) {
         </div>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button variant="ghost" onClick={handlePrevious}>
+        <Button variant="ghost" onClick={() => setCurrentStep("3")}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           Previous
         </Button>
