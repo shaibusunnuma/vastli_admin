@@ -25,19 +25,19 @@ function BasicInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
   });
   const onSubmit = (data: BasicInfoType) => {
     setRestaurant({ ...restaurant, ...data });
-    setCurrentStep("contact-info");
+    setCurrentStep("owner-info");
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={()=>setCurrentStep("owner-info")}>
+      {/* <form onSubmit={form.handleSubmit(onSubmit)}> */}
         <Card>
           <CardHeader>
             <CardTitle>Basic Information</CardTitle>
             <CardDescription>Enter the restaurant's basic details</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {/* Restaurant Name and Type */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
@@ -68,7 +68,7 @@ function BasicInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
             </div>
 
             {/* Web ID */}
-            {/* <FormField
+            <FormField
               control={form.control}
               name="webId"
               render={({ field }) => (
@@ -81,7 +81,7 @@ function BasicInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
                   <FormMessage />
                 </FormItem>
               )}
-            /> */}
+            />
 
             <FormField
               control={form.control}
@@ -97,7 +97,38 @@ function BasicInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
               )}
             />
 
-            {/* Address Fields */}
+            {/* Contact Fields */}
+            <h3 className="text-lg font-medium pt-2">Contact *</h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="contact.phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone Number</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Restaurant phone number" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="contact.email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Public Email</FormLabel>
+                    <FormControl>
+                      <Input type="email" placeholder="Restaurant public email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
             <h3 className="text-lg font-medium pt-2">Address *</h3>
             <FormField
               control={form.control}
@@ -182,10 +213,7 @@ function BasicInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
             />
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button variant="ghost" disabled>
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Previous
-            </Button>
+            <div />
             <Button type="submit">
               Next
               <ArrowRight className="ml-2 h-4 w-4" />
