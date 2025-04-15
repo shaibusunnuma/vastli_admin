@@ -86,7 +86,6 @@ const operatingHoursBaseSchema = z.object({
   useIndividualDaySettings: z.boolean().default(false),
 });
 
-// Add conditional validation based on useIndividualDaySettings
 export const OperatingHoursSchema = operatingHoursBaseSchema
   .refine(
     (data) => {
@@ -118,6 +117,17 @@ export const OperatingHoursSchema = operatingHoursBaseSchema
   );
 
 export type OperatingHoursType = z.infer<typeof OperatingHoursSchema>;
+
+export const RestaurantSettingsSchema = z.object({
+  allowSelfBookingManagement: z.boolean(),
+  timeSlotInterval: z.number().int().min(15).max(120).default(30),
+  maxBookingDaysInAdvance: z.number().int().min(1).max(90).default(30),
+  minGuestsPerReservation: z.number().int().min(1).max(20).default(1),
+  maxGuestsPerReservation: z.number().int().min(1).max(50).default(20),
+  autoConfirmReservations: z.boolean().default(false),
+});
+
+export type RestaurantSettingsType = z.infer<typeof RestaurantSettingsSchema>;
 
 export const defaultRestaurant: Omit<Restaurant, "id" | "accountId" | "createdAt" | "updatedAt"> = {
   name: "",
