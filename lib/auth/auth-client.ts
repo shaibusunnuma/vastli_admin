@@ -3,6 +3,9 @@ import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { SERVER_URL } from "@/constants";
 import ApiErrorHandler from "../error-handler";
 import logger from "@/lib/logger";
+import { getDeviceInfo } from "../device-info";
+
+const deviceInfo = getDeviceInfo();
 
 const client = axios.create({
   baseURL: `${SERVER_URL}/auth/admin/`,
@@ -12,12 +15,9 @@ const client = axios.create({
   withCredentials: true,
 });
 
-// Flag to prevent multiple refresh token requests
 let isRefreshing = false;
-// Queue of requests to retry after token refresh
 let failedQueue: { resolve: (value: unknown) => void; reject: (reason?: any) => void }[] = [];
 
-// Process the queue of failed requests
 const processQueue = (error: any | null, token: string | null = null) => {
   failedQueue.forEach(promise => {
     if (error) {
@@ -30,7 +30,6 @@ const processQueue = (error: any | null, token: string | null = null) => {
   failedQueue = [];
 };
 
-// Add response interceptor to handle token refresh
 client.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
@@ -72,9 +71,9 @@ client.interceptors.response.use(
 );
 
 export const authClient = {
-  async signIn(params: SignInParams) {
+  async signIn(params: Omit<SignInParams, 'deviceInfo'>) {
     try {
-      const { data } = await client.post("login", params);
+      const { data } = await client.post("login", { ...params, deviceInfo });
       return data.user;
     } catch (error: any) {
       throw ApiErrorHandler(error, "Login failed");
@@ -92,7 +91,7 @@ export const authClient = {
 
   async refreshToken() {
     try {
-      const { data } = await client.post("refresh-token");
+      const { data } = await client.post("refresh-token",);
       return data;
     } catch (error) {
       logger.error('Failed to refresh token', error);
@@ -102,7 +101,7 @@ export const authClient = {
 
   async signOut() {
     try {
-      await client.post(`logout`);
+      await client.post(`logout`, {}, { headers: { "x-device-id": deviceInfo.deviceId } });
     } catch (error) {
       logger.error('Error during logout', error);
     }

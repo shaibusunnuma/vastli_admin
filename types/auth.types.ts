@@ -16,6 +16,7 @@ export interface AuthState {
 export interface SignInParams {
   email: string;
   password: string;
+  deviceInfo: DeviceInfo;
 }
 
 export interface VerificationResource {
@@ -25,4 +26,10 @@ export interface VerificationResource {
 export interface UserResource extends AuthUser {
   update: (userData: Partial<AuthUser>) => Promise<void>;
   reload: () => Promise<void>;
+}
+
+export interface DeviceInfo {
+  deviceId: string;
+  deviceName: string;
+  deviceType: string;
 }

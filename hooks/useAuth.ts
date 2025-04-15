@@ -45,7 +45,7 @@ export function authHook() {
   // Sign in function
   const signIn = useMemo(() => {
     return {
-      create: async (params: SignInParams) => {
+      create: async (params: Omit<SignInParams, 'deviceInfo'>) => {
         setState((prev) => ({ ...prev, isLoading: true }));
         try {
           const user = await authClient.signIn(params);
