@@ -73,7 +73,7 @@ function BasicInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
               name="webId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Web ID *</FormLabel>
+                  <FormLabel>Web ID</FormLabel>
                   <FormControl>
                     <Input placeholder="e.g., coco-eats (used in URL)" {...field} />
                   </FormControl>
@@ -135,7 +135,7 @@ function BasicInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
               name="address.street"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Street Address</FormLabel>
+                  <FormLabel>Street Address*</FormLabel>
                   <FormControl>
                     <Input placeholder="Street address" {...field} />
                   </FormControl>
@@ -150,7 +150,7 @@ function BasicInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
                 name="address.city"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>City</FormLabel>
+                    <FormLabel>City*</FormLabel>
                     <FormControl>
                       <Input placeholder="City" {...field} />
                     </FormControl>
@@ -185,12 +185,13 @@ function BasicInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
                 )}
               />
             </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="address.country"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Country</FormLabel>
+                  <FormLabel>Country*</FormLabel>
                   <FormControl>
                     <Input placeholder="Country" {...field} />
                   </FormControl>
@@ -211,6 +212,7 @@ function BasicInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
                 </FormItem>
               )}
             />
+            </div>
           </CardContent>
           <CardFooter className="flex justify-between">
             <Button type="button" variant="ghost" onClick={() => setCurrentStep("1")}>

@@ -1,9 +1,9 @@
 import React from "react";
-import { useGetUserByIdQuery } from "@/lib/services/users/userApiSlice";
+import { useGetOperatorByIdQuery } from "@/lib/services/users/userApiSlice";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function OwnerInfo({ ownerId }: { ownerId?: string }) {
-  const { data: owner } = useGetUserByIdQuery(ownerId ?? "", { skip: !ownerId });
+  const { data: owner } = useGetOperatorByIdQuery(ownerId ?? "", { skip: !ownerId });
   return (
     <Card>
       <CardHeader>

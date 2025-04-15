@@ -1,5 +1,4 @@
 import React from "react";
-
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { ArrowRight } from "lucide-react";
@@ -10,6 +9,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardHeader, CardContent, CardDescription, CardFooter, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PhoneInput } from "@/components/ui/phone-input";
+import { useAddOperatorMutation } from "@/lib/services/users/userApiSlice";
+import { toast } from "sonner";
+import logger from "@/lib/logger";
+import { UserRole } from "@/types/users";
+import { useAddAccountMutation } from "@/lib/services/account/accountApiSlice";
 interface Props {
   restaurant: Partial<Restaurant>;
   setRestaurant: React.Dispatch<React.SetStateAction<Partial<Restaurant>>>;
@@ -17,13 +21,35 @@ interface Props {
 }
 
 function OwnerInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
+  const [createOperator] = useAddOperatorMutation();
+  const [createAccount] = useAddAccountMutation();
   const form = useForm<OwnerInfoType>({
     resolver: zodResolver(OwnerInfoSchema),
   });
 
-  const onSubmit = (data: OwnerInfoType) => {
-    console.log(data);
-    setCurrentStep("2");
+  const {
+    formState: { isSubmitting },
+  } = form;
+
+  const onSubmit = async (data: OwnerInfoType) => {
+    try {
+      const account = await createAccount({}).unwrap();
+      const op = await createOperator({
+        ...data,
+        primaryEmailAddress: {
+          emailAddress: data.email,
+          verified: false,
+        },
+        role: UserRole.OWNER,
+        accountId: account.id,
+      }).unwrap();
+      setRestaurant({ ...restaurant, ownerId: op.id, accountId: account.id });
+      setCurrentStep("2");
+    } catch (error: any) {
+      logger.error(error);
+      const msg = error.data.message || "Error creating restaurant";
+      toast.error(msg);
+    }
   };
 
   return (
@@ -98,7 +124,7 @@ function OwnerInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
           <CardFooter className="flex justify-between">
             <div />
             <Button type="submit">
-              Next
+              {isSubmitting ? "Saving..." : " Next"}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </CardFooter>
