@@ -8,28 +8,24 @@ import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"; // Import Form components
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { BasicInfoSchema, BasicInfoType } from "./schemas";
+import { Restaurant } from "@/types/restaurants";
 
-function BasicInfo() {
+interface Props {
+  restaurant: Partial<Restaurant>;
+  setRestaurant: React.Dispatch<React.SetStateAction<Partial<Restaurant>>>;
+  setCurrentStep: React.Dispatch<React.SetStateAction<string>>;
+}
+
+function BasicInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
   const form = useForm<BasicInfoType>({
     resolver: zodResolver(BasicInfoSchema),
     defaultValues: {
-      name: "",
-      type: "",
-      description: "",
-      webId: "",
-      address: {
-        street: "",
-        city: "",
-        state: "",
-        country: "United States",
-        postalCode: "",
-        googleMapsLink: "",
-      },
+      ...restaurant,
     },
   });
   const onSubmit = (data: BasicInfoType) => {
-    console.log("Basic Info Data:", data); // Optional: log data
-    // Pass validated data to the parent handler
+    setRestaurant({ ...restaurant, ...data });
+    setCurrentStep("contact-info");
   };
 
   return (
@@ -58,10 +54,10 @@ function BasicInfo() {
               />
               <FormField
                 control={form.control}
-                name="type"
+                name="cuisine"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Restaurant Type</FormLabel>
+                    <FormLabel>Cuisine</FormLabel>
                     <FormControl>
                       <Input placeholder="e.g. Italian, Japanese, etc." {...field} />
                     </FormControl>
@@ -72,7 +68,7 @@ function BasicInfo() {
             </div>
 
             {/* Web ID */}
-            <FormField
+            {/* <FormField
               control={form.control}
               name="webId"
               render={({ field }) => (
@@ -85,7 +81,7 @@ function BasicInfo() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <FormField
               control={form.control}
