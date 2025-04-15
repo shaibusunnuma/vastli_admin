@@ -7,8 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"; // Import Form components
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { BasicInfoSchema, BasicInfoType } from "./schemas";
 import { Restaurant } from "@/types/restaurants";
+import { BasicInfoSchema, BasicInfoType } from "./schemas";
 
 interface Props {
   restaurant: Partial<Restaurant>;

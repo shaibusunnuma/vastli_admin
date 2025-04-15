@@ -1,18 +1,17 @@
 "use client";
-
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { ArrowLeft } from "lucide-react";
 import OnboardingStep from "@/views/restaurants/onboard/onboarding-step";
-import BasicInfo from "./basic-info";
-import OwnerInfo from "./owner-info";
-import MenuSettings from "./menu-settings";
-import BillingInfo from "./billing-info";
-import InfoReview from "./info-review";
+import BasicInfo from "@/views/restaurants/onboard/basic-info";
+import OwnerInfo from "@/views/restaurants/onboard/owner-info";
+import MenuSettings from "@/views/restaurants/onboard/menu-settings";
+import BillingInfo from "@/views/restaurants/onboard/billing-info";
+import InfoReview from "@/views/restaurants/onboard/info-review";
 import { Restaurant } from "@/types/restaurants";
-import { defaultRestaurant } from "./schemas";
+import { defaultRestaurant } from "@/views/restaurants/onboard/schemas";
 
 export default function OnboardRestaurantPage() {
   const [currentStep, setCurrentStep] = useState("basic-info");

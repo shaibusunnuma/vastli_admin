@@ -4,11 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea"; // Import Textarea
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Restaurant } from "@/types/restaurants";
-import { OwnerInfoSchema, OwnerInfoType } from "./schemas"; // Adjust path if needed
+import { OwnerInfoSchema, OwnerInfoType } from "./schemas";
 
 interface Props {
   restaurant: Partial<Restaurant>;
@@ -20,25 +19,18 @@ function OwnerInfo({ restaurant, setRestaurant, setCurrentStep }: Props) {
   const form = useForm<OwnerInfoType>({
     resolver: zodResolver(OwnerInfoSchema),
     defaultValues: {
-      ...restaurant.contact,
+      firstName: "",
+      lastName: "",
+      phone: "",
+      email: "",
     },
   });
 
   const onSubmit = (data: OwnerInfoType) => {
-    // Merge validated data into the main restaurant state
-    // setRestaurant(prev => ({
-    //     ...prev,
-    //     contact: { ...prev.contact, ...data.contact },
-    //     website: data.website,
-    //     operatingHours: { ...prev.operatingHours, ...data.operatingHours } // Merge operating hours
-    //     // Add owner details if managed here
-    // }));
     setCurrentStep("menu-settings"); // Navigate to the next step
   };
 
   const handlePrevious = () => {
-    // Optionally trigger validation before going back if desired
-    // form.trigger().then(isValid => { ... });
     setCurrentStep("basic-info");
   };
 

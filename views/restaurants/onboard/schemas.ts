@@ -23,7 +23,7 @@ export const OwnerInfoSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   email: z.string().min(1, "Email is required").email(),
-  phone: z.string().refine((val) => !val || /^0?\d{9,10}$/.test(val), {
+  phone: z.string().min(1, "Phone is required").refine((val) => !val || /^0?\d{9,10}$/.test(val), {
     message: "Invalid phone number format",
   }),
 });
