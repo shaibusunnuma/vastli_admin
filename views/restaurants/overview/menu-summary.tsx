@@ -33,7 +33,7 @@ export default function MenuSummary({ restaurant }: Props) {
             </div>
             <div className="flex flex-col">
               <dt className="text-sm font-medium text-gray-500">Reservation Interval</dt>
-              <dd className="mt-1 text-sm">{restaurant.reservationInterval} minutes</dd>
+              <dd className="mt-1 text-sm">{restaurant.reservationSettings.timeSlotInterval} minutes</dd>
             </div>
           </div>
         </dl>

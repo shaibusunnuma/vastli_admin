@@ -4,22 +4,39 @@ export interface Restaurant {
   id: string;
   accountId: string;
   name: string;
-  webId?: string;
-  description?: string;
   cuisine: string;
-  address?: Address;
-  contact?: {
-    phone?: string;
+  status: UserStatus
+  webId?: string;
+  imageUrl?: string;
+  logoUrl?: string;
+  description?: string;
+  reservationSettings: {
+    allowSelfBookingManagement: boolean;
+    timeSlotInterval: number;
+    maxBookingDaysInAdvance: number;
+    minGuestsPerReservation: number;
+    maxGuestsPerReservation: number;
+    autoConfirmReservations: boolean;
+  };
+  address: Address;
+  contact: {
+    phone: string;
     email?: string;
   };
-  operatingHours?: {
-    weekends?: string;
-    weekdays?: string;
+  operatingHours: {
+    weekends: string;
+    weekdays: string;
+    monday?: string;
+    tuesday?: string;
+    wednesday?: string;
+    thursday?: string;
+    friday?: string;
+    saturday?: string;
+    sunday?: string;
+    useIndividualDaySettings: boolean;
   };
-  status: UserStatus;
   priceRange: string;
-  reservationInterval: number;
-  capacity: number;
+  capacity: string;
   ownerId: string;
   createdAt: string;
   updatedAt: string;
