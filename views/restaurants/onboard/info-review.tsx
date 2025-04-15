@@ -8,6 +8,7 @@ import { useAddRestaurantMutation } from "@/lib/services/restaurants/restaurantA
 import logger from "@/lib/logger";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface Props {
   restaurant: Partial<Restaurant>;
@@ -17,8 +18,23 @@ interface Props {
 
 function InfoReview({ restaurant, setRestaurant, setCurrentStep }: Props) {
   const router = useRouter();
-  const { name, cuisine, priceRange, capacity, address, contact, reservationSettings } = restaurant;
+  const {
+    name,
+    cuisine,
+    priceRange,
+    capacity,
+    address,
+    contact,
+    reservationSettings,
+    operatingHours,
+    webId,
+    imageUrl,
+    logoUrl,
+    description,
+    ownerId,
+  } = restaurant;
   const [isLoading, setIsLoading] = useState(false);
+  const [checked, setChecked] = useState(false);
 
   const [createRestaurant] = useAddRestaurantMutation();
 
@@ -27,7 +43,7 @@ function InfoReview({ restaurant, setRestaurant, setCurrentStep }: Props) {
       setIsLoading(true);
       await createRestaurant(restaurant);
       toast.success("Restaurant created successfully!");
-      // router.push("/restaurants");
+      router.push("/restaurants");
     } catch (error: any) {
       logger.error(error);
       const msg = error.data.message || "Error creating customer";
@@ -49,23 +65,68 @@ function InfoReview({ restaurant, setRestaurant, setCurrentStep }: Props) {
           <h3 className="font-medium mb-2">Basic Information</h3>
           <div className="grid grid-cols-2 gap-2 text-sm">
             <div>
-              <span className="text-gray-500">Restaurant Name:</span>
+              <span className="text-gray-500">Name:</span>
               <span className="ml-2">{name || "—"}</span>
             </div>
             <div>
               <span className="text-gray-500">Cuisine:</span>
               <span className="ml-2">{cuisine || "—"}</span>
             </div>
+            <div>
+              <span className="text-gray-500">Price Range:</span>
+              <span className="ml-2">{priceRange || "—"}</span>
+            </div>
+            <div>
+              <span className="text-gray-500">Capacity:</span>
+              <span className="ml-2">{capacity || "—"}</span>
+            </div>
             <div className="col-span-2">
-              <span className="text-gray-500">Address:</span>
-              <span className="ml-2">
-                {address ? `${address.street || ""}, ${address.city || ""}, ${address.state || ""}, ${address.country || ""}` : "—"}
-              </span>
+              <span className="text-gray-500">Description:</span>
+              <span className="ml-2">{description || "—"}</span>
+            </div>
+            <div>
+              <span className="text-gray-500">Web ID:</span>
+              <span className="ml-2">{webId || "—"}</span>
+            </div>
+            <div>
+              <span className="text-gray-500">Logo URL:</span>
+              <span className="ml-2">{logoUrl || "—"}</span>
+            </div>
+            <div>
+              <span className="text-gray-500">Image URL:</span>
+              <span className="ml-2">{imageUrl || "—"}</span>
             </div>
           </div>
         </div>
 
-        {/* Contact Info */}
+        {/* Address */}
+        <div className="rounded-md border border-gray-200 dark:border-gray-800 p-4">
+          <h3 className="font-medium mb-2">Address</h3>
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            <div>
+              <span className="text-gray-500">Street:</span>
+              <span className="ml-2">{address?.street || "—"}</span>
+            </div>
+            <div>
+              <span className="text-gray-500">City:</span>
+              <span className="ml-2">{address?.city || "—"}</span>
+            </div>
+            <div>
+              <span className="text-gray-500">State:</span>
+              <span className="ml-2">{address?.state || "—"}</span>
+            </div>
+            <div>
+              <span className="text-gray-500">Postal Code:</span>
+              <span className="ml-2">{address?.postalCode || "—"}</span>
+            </div>
+            <div>
+              <span className="text-gray-500">Country:</span>
+              <span className="ml-2">{address?.country || "—"}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Contact */}
         <div className="rounded-md border border-gray-200 dark:border-gray-800 p-4">
           <h3 className="font-medium mb-2">Contact Information</h3>
           <div className="grid grid-cols-2 gap-2 text-sm">
@@ -80,33 +141,74 @@ function InfoReview({ restaurant, setRestaurant, setCurrentStep }: Props) {
           </div>
         </div>
 
-        {/* Menu & Reservation Settings */}
+        {/* Reservation Settings */}
         <div className="rounded-md border border-gray-200 dark:border-gray-800 p-4">
-          <h3 className="font-medium mb-2">Menu & Reservation Settings</h3>
+          <h3 className="font-medium mb-2">Reservation Settings</h3>
           <div className="grid grid-cols-2 gap-2 text-sm">
             <div>
-              <span className="text-gray-500">Price Range:</span>
-              <span className="ml-2">{priceRange || "—"}</span>
-            </div>
-            <div>
-              <span className="text-gray-500">Seating Capacity:</span>
-              <span className="ml-2">{capacity || "—"}</span>
-            </div>
-            <div>
               <span className="text-gray-500">Time Slot Interval:</span>
-              <span className="ml-2">{reservationSettings?.timeSlotInterval ? `${reservationSettings.timeSlotInterval} minutes` : "—"}</span>
+              <span className="ml-2">{reservationSettings?.timeSlotInterval} minutes</span>
             </div>
             <div>
-              <span className="text-gray-500">Guests per Reservation:</span>
+              <span className="text-gray-500">Max Booking Days:</span>
+              <span className="ml-2">{reservationSettings?.maxBookingDaysInAdvance}</span>
+            </div>
+            <div>
+              <span className="text-gray-500">Guests Per Reservation:</span>
               <span className="ml-2">
-                {reservationSettings?.minGuestsPerReservation ?? "—"} - {reservationSettings?.maxGuestsPerReservation ?? "—"}
+                {reservationSettings?.minGuestsPerReservation} - {reservationSettings?.maxGuestsPerReservation}
               </span>
+            </div>
+            <div>
+              <span className="text-gray-500">Allow Self Booking:</span>
+              <span className="ml-2">{reservationSettings?.allowSelfBookingManagement ? "Yes" : "No"}</span>
+            </div>
+            <div>
+              <span className="text-gray-500">Auto Confirm Reservations:</span>
+              <span className="ml-2">{reservationSettings?.autoConfirmReservations ? "Yes" : "No"}</span>
             </div>
           </div>
         </div>
 
-        {/* Billing */}
+        {/* Operating Hours */}
         <div className="rounded-md border border-gray-200 dark:border-gray-800 p-4">
+          <h3 className="font-medium mb-2">Operating Hours</h3>
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            {operatingHours?.useIndividualDaySettings ? (
+              <>
+                {["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"].map((day) => (
+                  <div key={day}>
+                    <span className="text-gray-500 capitalize">{day}:</span>
+                    <span className="ml-2">{(operatingHours as any)?.[day] || "—"}</span>
+                  </div>
+                ))}
+              </>
+            ) : (
+              <>
+                <div>
+                  <span className="text-gray-500">Weekdays:</span>
+                  <span className="ml-2">{operatingHours?.weekdays || "—"}</span>
+                </div>
+                <div>
+                  <span className="text-gray-500">Weekends:</span>
+                  <span className="ml-2">{operatingHours?.weekends || "—"}</span>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Owner */}
+        {/* <div className="rounded-md border border-gray-200 dark:border-gray-800 p-4">
+          <h3 className="font-medium mb-2">Owner</h3>
+          <div className="text-sm">
+            <span className="text-gray-500">Owner ID:</span>
+            <span className="ml-2">{ownerId || "—"}</span>
+          </div>
+        </div> */}
+
+        {/* Billing (placeholder) */}
+        {/* <div className="rounded-md border border-gray-200 dark:border-gray-800 p-4">
           <h3 className="font-medium mb-2">Billing Information</h3>
           <div className="grid grid-cols-2 gap-2 text-sm">
             <div>
@@ -118,11 +220,11 @@ function InfoReview({ restaurant, setRestaurant, setCurrentStep }: Props) {
               <span className="ml-2">Visa ending in 4242</span>
             </div>
           </div>
-        </div>
+        </div> */}
 
-        {/* Terms */}
+        {/* Confirmation */}
         <div className="flex items-center space-x-2">
-          <input type="checkbox" id="terms" className="h-4 w-4 rounded border-gray-300 text-violet-600 focus:ring-violet-600" />
+          <Checkbox onCheckedChange={(checked) => setChecked(checked as boolean)} id="terms" />
           <Label htmlFor="terms" className="text-sm">
             I confirm that all information provided is accurate and I agree to the terms and conditions
           </Label>
