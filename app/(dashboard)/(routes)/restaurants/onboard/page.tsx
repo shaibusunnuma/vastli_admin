@@ -7,7 +7,7 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { ArrowLeft } from "lucide-react";
 import OnboardingStep from "@/views/restaurants/onboard/onboarding-step";
 import BasicInfo from "./basic-info";
-import ContactInfo from "./contact-info";
+import OwnerInfo from "./owner-info";
 import MenuSettings from "./menu-settings";
 import BillingInfo from "./billing-info";
 import InfoReview from "./info-review";
@@ -19,15 +19,15 @@ export default function OnboardRestaurantPage() {
   const [restaurantData, setRestaurantData] = useState<Partial<Restaurant>>(defaultRestaurant);
 
   const handleNext = () => {
-    if (currentStep === "basic-info") setCurrentStep("contact-info");
-    else if (currentStep === "contact-info") setCurrentStep("menu-settings");
+    if (currentStep === "basic-info") setCurrentStep("owner-info");
+    else if (currentStep === "owner-info") setCurrentStep("menu-settings");
     else if (currentStep === "menu-settings") setCurrentStep("billing-info");
     else if (currentStep === "billing-info") setCurrentStep("review");
   };
 
   const handlePrevious = () => {
-    if (currentStep === "contact-info") setCurrentStep("basic-info");
-    else if (currentStep === "menu-settings") setCurrentStep("contact-info");
+    if (currentStep === "owner-info") setCurrentStep("basic-info");
+    else if (currentStep === "menu-settings") setCurrentStep("owner-info");
     else if (currentStep === "billing-info") setCurrentStep("menu-settings");
     else if (currentStep === "review") setCurrentStep("billing-info");
   };
@@ -48,11 +48,11 @@ export default function OnboardRestaurantPage() {
 
       <Tabs value={currentStep} className="w-full">
         <TabsContent value="basic-info">
-          <BasicInfo restaurant={restaurantData} setRestaurant={setRestaurantData} setCurrentStep= {setCurrentStep} />
+          <BasicInfo restaurant={restaurantData} setRestaurant={setRestaurantData} setCurrentStep={setCurrentStep} />
         </TabsContent>
 
-        <TabsContent value="contact-info">
-          <ContactInfo restaurant={restaurantData} setRestaurant={setRestaurantData} setCurrentStep= {setCurrentStep} />
+        <TabsContent value="owner-info">
+          <OwnerInfo restaurant={restaurantData} setRestaurant={setRestaurantData} setCurrentStep={setCurrentStep} />
         </TabsContent>
 
         <TabsContent value="menu-settings">
