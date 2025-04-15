@@ -7,7 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import OnboardingStep from "@/views/restaurants/onboard/onboarding-step";
 import BasicInfo from "@/views/restaurants/onboard/basic-info";
 import OwnerInfo from "@/views/restaurants/onboard/owner-info";
-import MenuSettings from "@/views/restaurants/onboard/restaurant-settings";
+import RestaurantSettings from "@/views/restaurants/onboard/restaurant-settings";
 import BillingInfo from "@/views/restaurants/onboard/billing-info";
 import InfoReview from "@/views/restaurants/onboard/info-review";
 import { Restaurant } from "@/types/restaurants";
@@ -55,7 +55,7 @@ export default function OnboardRestaurantPage() {
         </TabsContent>
 
         <TabsContent value="restaurant-settings">
-          <MenuSettings handleNext={handleNext} handlePrevious={handlePrevious} />
+          <RestaurantSettings restaurant={restaurantData} setRestaurant={setRestaurantData} setCurrentStep={setCurrentStep} />
         </TabsContent>
 
         <TabsContent value="billing-info">

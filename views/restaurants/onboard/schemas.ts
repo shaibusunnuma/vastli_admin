@@ -127,6 +127,14 @@ export const RestaurantSettingsSchema = z.object({
   autoConfirmReservations: z.boolean().default(false),
 });
 
+export const SettingsAndHoursSchema = z.object({
+  reservationSettings: RestaurantSettingsSchema,
+  operatingHours: OperatingHoursSchema,
+});
+
+export type SettingsAndHoursType = z.infer<typeof SettingsAndHoursSchema>;
+
+
 export type RestaurantSettingsType = z.infer<typeof RestaurantSettingsSchema>;
 
 export const defaultRestaurant: Omit<Restaurant, "id" | "accountId" | "createdAt" | "updatedAt"> = {
