@@ -13,7 +13,7 @@ interface Props {
 export default function MenuAndReservation({ restaurant }: Props) {
   if (!restaurant) return null;
   return (
-    <Card className="shadow-xl border-0">
+    <Card className="border-0">
       <CardHeader className="pb-3 flex flex-row items-center gap-4">
         <Settings2 className="h-6 w-6 text-muted-foreground" />
         <div className="flex-1">

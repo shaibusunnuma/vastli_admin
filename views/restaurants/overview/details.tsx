@@ -39,7 +39,7 @@ export default function DetailsCard({ restaurant }: Props) {
     : [];
 
   return (
-    <Card className="shadow-xl border-0">
+    <Card className="border-0">
       <CardHeader className="pb-3 flex flex-row items-center gap-4">
         <Avatar className="h-14 w-14">
           <AvatarImage src={restaurant.logoUrl || restaurant.imageUrl} alt={restaurant.name} />
