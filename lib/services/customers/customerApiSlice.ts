@@ -67,5 +67,12 @@ export const customerApiSlice = createApi({
   }),
 });
 
-export const { useGetCustomersQuery, useGetCustomerByIdQuery, useAddCustomerMutation, useUpdateCustomerMutation, useDeleteCustomerMutation } =
-  customerApiSlice;
+export const {
+  useGetCustomersQuery,
+  useGetCustomerByIdQuery,
+  useGetCustomersByFilterQuery,
+  useGetCustomersStatsQuery,
+  useAddCustomerMutation,
+  useUpdateCustomerMutation,
+  useDeleteCustomerMutation,
+} = customerApiSlice;

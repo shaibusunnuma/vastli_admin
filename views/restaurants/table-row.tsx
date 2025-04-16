@@ -5,19 +5,16 @@ import { Store } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Restaurant } from "@/types/restaurants";
-import { useGetCustomersQuery } from "@/lib/services/customers/customerApiSlice";
+import { useGetCustomersStatsQuery } from "@/lib/services/customers/customerApiSlice";
 import { format } from "date-fns";
-import { useGetReservationByFilterQuery } from "@/lib/services/reservations/reservationApiSlice";
+import { useGetReservationStatsQuery } from "@/lib/services/reservations/reservationApiSlice";
 
 export default function Row({ restaurant }: { restaurant: Restaurant }) {
-  const {
-    data: customers,
-    error,
-    isLoading,
-  } = useGetCustomersQuery({
-    filter: { restaurants: [restaurant.id], page: 1, limit: 10 },
+  const { data: customerStats } = useGetCustomersStatsQuery({
+    restaurantId: restaurant.id,
   });
-  const { data: reservations, isLoading: reservationsLoading } = useGetReservationByFilterQuery({
+
+  const { data: reservationStats } = useGetReservationStatsQuery({
     restaurantId: restaurant.id,
   });
 
@@ -31,7 +28,9 @@ export default function Row({ restaurant }: { restaurant: Restaurant }) {
           {restaurant.name}
         </div>
       </TableCell>
-      <TableCell>{restaurant.address?.city}, {restaurant.address?.state}, {restaurant.address?.country}</TableCell>
+      <TableCell>
+        {restaurant.address?.city}, {restaurant.address?.state}, {restaurant.address?.country}
+      </TableCell>
       <TableCell>
         <span
           className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -45,8 +44,8 @@ export default function Row({ restaurant }: { restaurant: Restaurant }) {
           {restaurant.status}
         </span>
       </TableCell>
-      <TableCell>{customers?.data?.length}</TableCell>
-      <TableCell>{reservations?.length}</TableCell>
+      <TableCell>{customerStats?.total}</TableCell>
+      <TableCell>{reservationStats?.total}</TableCell>
       <TableCell>{format(new Date(restaurant.createdAt), "MMM dd, yyyy")}</TableCell>
       <TableCell className="text-right">
         <Link href={`/restaurants/${restaurant.id}`}>

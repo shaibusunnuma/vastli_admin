@@ -97,6 +97,7 @@ export const reservationApiSlice = createApi({
 
 export const {
   useGetReservationsQuery,
+  useGetReservationStatsQuery,
   useGetReservationByFilterQuery,
   useGetReservationByIdQuery,
   useAddReservationMutation,
