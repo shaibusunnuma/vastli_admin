@@ -22,6 +22,20 @@ export enum PERIOD {
   DAY = "DAY",
   WEEK = "WEEK",
   MONTH = "MONTH",
+  ALL = "ALL",
+}
+
+export interface BookingStats {
+  total: number;
+  statusCounts: Record<string, number>;
+  newBookings: {
+    today: number;
+    last7Days: number;
+    last30Days: number;
+  };
+  completed: number;
+  cancelled: number;
+  generatedAt: Date;
 }
 
 export enum ReservationStatus {

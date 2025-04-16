@@ -52,6 +52,21 @@ export interface Customer extends User {
   imageUrl?: string;
   restaurants?: string[];
 }
+
+export interface CustomerStats {
+  total: number;
+  statusCounts: Record<string, number>;
+  newCustomers: {
+    today: number;
+    last7Days: number;
+    last30Days: number;
+  };
+  loginStats: {
+    loggedInLast7Days: number;
+    neverLoggedIn: number;
+  };
+  generatedAt: Date;
+}
 export interface Server extends User {}
 
 interface PaginationMetadata {
