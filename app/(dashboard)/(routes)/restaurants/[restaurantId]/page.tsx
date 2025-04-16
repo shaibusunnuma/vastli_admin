@@ -2,9 +2,8 @@
 import { use, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Calendar, CreditCard, Edit, MoreHorizontal, Store, Users } from "lucide-react";
+import { ArrowLeft, Edit, MoreHorizontal, Store } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,18 +18,16 @@ import Customers from "@/views/restaurants/customers";
 import Reservations from "@/views/restaurants/reservations";
 import Billing from "@/views/restaurants/billing";
 import RestaurantSummary from "@/views/restaurants/restaurant-summary";
+import { selectRestaurantStats } from "@/lib/features/restaurants/restaurantSlice";
+import { useAppSelector } from "@/lib/hooks";
 
 export default function RestaurantDetailPage({ params }: { params: Promise<{ restaurantId: string }> }) {
   const [activeTab, setActiveTab] = useState("overview");
   const { restaurantId } = use(params);
   const { data } = useGetRestaurantByIdQuery(restaurantId, { skip: !restaurantId });
-
-  const restaurant = {
-    plan: "Standard",
-    billingCycle: "Monthly",
-    nextBillingDate: "Apr 15, 2025",
-    paymentMethod: "Visa ending in 4242",
-  };
+  const stats = useAppSelector(selectRestaurantStats);
+  const customerStats = stats?.customerStats;
+  const reservationStats = stats?.reservationStats;
 
   return (
     <div className="flex flex-col gap-5">
@@ -79,7 +76,11 @@ export default function RestaurantDetailPage({ params }: { params: Promise<{ res
         </div>
       </div>
 
-      <RestaurantSummary restaurant={data} />
+      <RestaurantSummary 
+        restaurant={data}
+        customerStats={customerStats}
+        reservationStats={reservationStats}
+      />
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-4">
