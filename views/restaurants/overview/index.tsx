@@ -2,7 +2,7 @@ import React from "react";
 
 import DetailsCard from "@/views/restaurants/overview/details";
 import OwnerInfo from "@/views/restaurants/overview/owner-info";
-import MenuSummary from "@/views/restaurants/overview/menu-summary";
+import MenuAndReservation from "@/views/restaurants/overview/menu-and-reservation";
 import BillingInfo from "@/views/restaurants/overview/billing-info";
 import { Restaurant } from "@/types/restaurants";
 
@@ -17,7 +17,7 @@ export default function Overview({ restaurant }: Props) {
 
       <OwnerInfo ownerId={restaurant?.ownerId} />
 
-      <MenuSummary restaurant={restaurant} />
+      <MenuAndReservation restaurant={restaurant} />
 
       <BillingInfo />
     </div>
