@@ -1,19 +1,19 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { axiosBaseQuery } from "@/lib/baseQuery";
 import { providesList } from "../../common";
-import { Operator } from "@/types/users";
+import { Operator, UserResponse } from "@/types/users";
 
 export const userApiSlice = createApi({
   reducerPath: "userApi",
   baseQuery: axiosBaseQuery({ baseUrl: "operators" }),
   tagTypes: ["Operator"],
   endpoints: (build) => ({
-    getOperators: build.query<Operator[], Partial<Operator>>({
+    getOperators: build.query<UserResponse<Operator>, Partial<Operator>>({
       query: (filter) => ({
         url: "",
         params: { filter: { ...filter, page: 1 } },
       }),
-      providesTags: (result, error) => providesList(result, "Operator"),
+      providesTags: (result, error) => providesList(result?.data, "Operator"),
     }),
 
     getOperatorById: build.query<Operator, string>({

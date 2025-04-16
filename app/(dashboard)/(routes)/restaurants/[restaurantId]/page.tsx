@@ -18,6 +18,7 @@ import Customers from "@/views/restaurants/customers";
 import Reservations from "@/views/restaurants/reservations";
 import Billing from "@/views/restaurants/billing";
 import RestaurantSummary from "@/views/restaurants/restaurant-summary";
+import UsersTab from "@/views/restaurants/users";
 import { selectRestaurantStats } from "@/lib/features/restaurants/restaurantSlice";
 import { useAppSelector } from "@/lib/hooks";
 
@@ -83,11 +84,12 @@ export default function RestaurantDetailPage({ params }: { params: Promise<{ res
       />
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="customers">Customers</TabsTrigger>
           <TabsTrigger value="reservations">Reservations</TabsTrigger>
           <TabsTrigger value="billing">Billing</TabsTrigger>
+          <TabsTrigger value="users">Users</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview">
@@ -104,6 +106,10 @@ export default function RestaurantDetailPage({ params }: { params: Promise<{ res
 
         <TabsContent value="billing">
           <Billing />
+        </TabsContent>
+
+        <TabsContent value="users">
+          <UsersTab accountId={data?.accountId} />
         </TabsContent>
       </Tabs>
     </div>
