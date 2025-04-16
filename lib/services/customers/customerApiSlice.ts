@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { axiosBaseQuery } from "@/lib/baseQuery";
-import { Customer, UserResponse } from "@/types/users";
+import { Customer, CustomerStats, UserResponse } from "@/types/users";
 import { providesList } from "../../common";
 
 export const customerApiSlice = createApi({
@@ -14,6 +14,22 @@ export const customerApiSlice = createApi({
         params: { filter, query },
       }),
       providesTags: (result, error) => providesList(result?.data, "Customers"),
+    }),
+
+    getCustomersByFilter: build.query<Customer[], Partial<Customer>>({
+      query: (filter) => ({
+        url: "/filter",
+        params: filter,
+      }),
+      providesTags: (result, error, filter) => providesList(result, "Customers", JSON.stringify(filter)),
+    }),
+
+    getCustomersStats: build.query<CustomerStats, Partial<Customer>>({
+      query: (filter) => ({
+        url: "/stats",
+        params: filter,
+      }),
+      providesTags: (result, error, filter) => [{ type: "Customers", id: "STATS" }],
     }),
 
     getCustomerById: build.query<Customer, string>({
@@ -51,10 +67,5 @@ export const customerApiSlice = createApi({
   }),
 });
 
-export const {
-  useGetCustomersQuery,
-  useGetCustomerByIdQuery,
-  useAddCustomerMutation,
-  useUpdateCustomerMutation,
-  useDeleteCustomerMutation,
-} = customerApiSlice;
+export const { useGetCustomersQuery, useGetCustomerByIdQuery, useAddCustomerMutation, useUpdateCustomerMutation, useDeleteCustomerMutation } =
+  customerApiSlice;
