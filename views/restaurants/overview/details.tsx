@@ -1,5 +1,11 @@
-import React from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Separator } from "@/components/ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { CheckCircle2, Info, Ban, Utensils, DollarSign, Users, Phone, Mail, Globe, MapPin, CalendarClock } from "lucide-react";
+import { UserStatus } from "@/types/users";
 import { Restaurant } from "@/types/restaurants";
 
 interface Props {
@@ -8,150 +14,177 @@ interface Props {
 
 export default function DetailsCard({ restaurant }: Props) {
   if (!restaurant) return null;
+
+  const getStatusIcon = (status: UserStatus) => {
+    switch (status) {
+      case "ACTIVE":
+        return <CheckCircle2 className="h-3 w-3 text-green-600" />;
+      case "PENDING":
+        return <Info className="h-3 w-3 text-yellow-600" />;
+      default:
+        return <Ban className="h-3 w-3 text-gray-400" />;
+    }
+  };
+
+  const formatAddress = (address: typeof restaurant.address) => {
+    if (!address) return "No address provided";
+    const parts = [address.street, address.city, address.state, address.country, address.postalCode].filter(Boolean);
+    return parts.join(", ");
+  };
+
+  const operatingHoursEntries = restaurant.operatingHours
+    ? Object.entries(restaurant.operatingHours).filter(([key]) =>
+        ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"].includes(key)
+      )
+    : [];
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Restaurant Details</CardTitle>
-        <CardDescription>Comprehensive information about the restaurant</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="flex flex-col md:flex-row gap-6">
-          {/* Image/Logo */}
-          <div className="flex flex-col items-center md:items-start gap-2 min-w-[120px]">
-            {restaurant?.logoUrl && (
-              <img src={restaurant.logoUrl} alt="Logo" className="h-16 w-16 object-contain rounded-full border" />
+    <Card className="shadow-xl border-0">
+      <CardHeader className="pb-3 flex flex-row items-center gap-4">
+        <Avatar className="h-14 w-14">
+          <AvatarImage src={restaurant.logoUrl || restaurant.imageUrl} alt={restaurant.name} />
+          <AvatarFallback>{restaurant.name?.[0]?.toUpperCase()}</AvatarFallback>
+        </Avatar>
+        <div className="flex-1">
+          <CardTitle className="text-2xl flex items-center gap-2">
+            {restaurant.name}
+            {restaurant.status && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Badge variant="outline" className="capitalize flex items-center gap-1 px-2 py-1 text-xs">
+                      {getStatusIcon(restaurant.status)}
+                      {restaurant.status.toLowerCase()}
+                    </Badge>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <span>Status: {restaurant.status}</span>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             )}
-            {restaurant?.imageUrl && (
-              <img src={restaurant.imageUrl} alt="Restaurant" className="h-24 w-32 object-cover rounded-lg border" />
+          </CardTitle>
+          <CardDescription className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
+            {restaurant.cuisine && (
+              <span className="flex items-center gap-1.5">
+                <Utensils className="h-4 w-4 text-muted-foreground" />
+                {restaurant.cuisine}
+              </span>
             )}
-            <span className={`mt-2 px-2 py-1 rounded-full text-xs font-medium ${
-              restaurant?.status === "ACTIVE"
-                ? "bg-green-100 text-green-800"
-                : restaurant?.status === "PENDING"
-                ? "bg-yellow-100 text-yellow-800"
-                : "bg-gray-100 text-gray-800"
-            }`}>
-              {restaurant?.status}
-            </span>
-          </div>
-
-          <dl className="flex-1 space-y-4">
-            {/* Name, Cuisine, Price, Capacity */}
-            <div className="flex flex-col md:flex-row md:gap-8">
-              <div>
-                <dt className="text-sm font-medium text-gray-500">Name</dt>
-                <dd className="mt-1 text-base font-semibold">{restaurant?.name}</dd>
-              </div>
-              <div>
-                <dt className="text-sm font-medium text-gray-500">Cuisine</dt>
-                <dd className="mt-1 text-sm">{restaurant?.cuisine}</dd>
-              </div>
-              <div>
-                <dt className="text-sm font-medium text-gray-500">Price Range</dt>
-                <dd className="mt-1 text-sm">{restaurant?.priceRange}</dd>
-              </div>
-              <div>
-                <dt className="text-sm font-medium text-gray-500">Capacity</dt>
-                <dd className="mt-1 text-sm">{restaurant?.capacity}</dd>
-              </div>
-            </div>
-
-            {/* Description */}
-            {restaurant?.description && (
-              <div className="flex flex-col">
-                <dt className="text-sm font-medium text-gray-500">Description</dt>
-                <dd className="mt-1 text-sm">{restaurant.description}</dd>
-              </div>
+            {restaurant.priceRange && (
+              <span className="flex items-center gap-1.5">
+                <DollarSign className="h-4 w-4 text-muted-foreground" />
+                {restaurant.priceRange}
+              </span>
             )}
-
-            {/* Address */}
-            <div className="flex flex-col">
-              <dt className="text-sm font-medium text-gray-500">Address</dt>
-              <dd className="mt-1 text-sm">
-                {restaurant?.address?.street && <>{restaurant.address.street}, </>}
-                {restaurant?.address?.city}, {restaurant?.address?.state}, {restaurant?.address?.country}
-                {restaurant?.address?.postalCode && <>, {restaurant.address.postalCode}</>}
-                {restaurant?.address?.googleMapsLink && (
-                  <>
-                    <br />
-                    <a href={restaurant.address.googleMapsLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                      View on Google Maps
-                    </a>
-                  </>
-                )}
-              </dd>
-            </div>
-
-            {/* Contact Info */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col">
-                <dt className="text-sm font-medium text-gray-500">Phone</dt>
-                <dd className="mt-1 text-sm">{restaurant?.contact?.phone}</dd>
-              </div>
-              <div className="flex flex-col">
-                <dt className="text-sm font-medium text-gray-500">Email</dt>
-                <dd className="mt-1 text-sm">{restaurant?.contact?.email}</dd>
-              </div>
-            </div>
-
-            {/* Website */}
-            {restaurant?.webId && (
-              <div className="flex flex-col">
-                <dt className="text-sm font-medium text-gray-500">Website</dt>
-                <dd className="mt-1 text-sm">
-                  <a href={restaurant.webId} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                    {restaurant.webId}
-                  </a>
-                </dd>
-              </div>
+            {restaurant.capacity !== undefined && restaurant.capacity !== null && (
+              <span className="flex items-center gap-1.5">
+                <Users className="h-4 w-4 text-muted-foreground" />
+                {restaurant.capacity} seats
+              </span>
             )}
-
-            {/* Reservation Settings */}
-            <div className="flex flex-col">
-              <dt className="text-sm font-medium text-gray-500">Reservation Settings</dt>
-              <dd className="mt-1 text-sm">
-                <ul className="list-disc ml-4">
-                  <li>Allow Self-Booking Management: {restaurant?.reservationSettings?.allowSelfBookingManagement ? "Yes" : "No"}</li>
-                  <li>Time Slot Interval: {restaurant?.reservationSettings?.timeSlotInterval} min</li>
-                  <li>Max Booking Days In Advance: {restaurant?.reservationSettings?.maxBookingDaysInAdvance}</li>
-                  <li>Guests Per Reservation: {restaurant?.reservationSettings?.minGuestsPerReservation} - {restaurant?.reservationSettings?.maxGuestsPerReservation}</li>
-                  <li>Auto-Confirm Reservations: {restaurant?.reservationSettings?.autoConfirmReservations ? "Yes" : "No"}</li>
-                </ul>
-              </dd>
-            </div>
-
-            {/* Operating Hours */}
-            <div className="flex flex-col">
-              <dt className="text-sm font-medium text-gray-500">Operating Hours</dt>
-              <dd className="mt-1 text-sm">
-                {restaurant?.operatingHours?.useIndividualDaySettings ? (
-                  <ul className="list-disc ml-4">
-                    {Object.entries(restaurant.operatingHours)
-                      .filter(([key]) => ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"].includes(key))
-                      .map(([day, hours]) => (
-                        <li key={day} className="capitalize">{day}: {hours}</li>
-                      ))}
-                  </ul>
-                ) : (
-                  <>
-                    <div>Weekdays: {restaurant?.operatingHours?.weekdays}</div>
-                    <div>Weekends: {restaurant?.operatingHours?.weekends}</div>
-                  </>
-                )}
-              </dd>
-            </div>
-
-            {/* Created/Updated */}
-            <div className="flex flex-col">
-              <dt className="text-sm font-medium text-gray-500">Created At</dt>
-              <dd className="mt-1 text-sm">{restaurant?.createdAt && new Date(restaurant.createdAt).toLocaleString()}</dd>
-            </div>
-            <div className="flex flex-col">
-              <dt className="text-sm font-medium text-gray-500">Last Updated</dt>
-              <dd className="mt-1 text-sm">{restaurant?.updatedAt && new Date(restaurant.updatedAt).toLocaleString()}</dd>
-            </div>
-          </dl>
+          </CardDescription>
         </div>
+      </CardHeader>
+      <CardContent className="pt-0">
+        <Separator className="mb-4" />
+        <ScrollArea className="h-auto max-h-[420px] pr-2">
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              {restaurant.description && (
+                <div className="bg-muted rounded-lg p-3">
+                  <div className="flex items-center gap-2 mb-1 text-muted-foreground text-xs font-medium">
+                    <Info className="h-4 w-4" /> Description
+                  </div>
+                  <div className="text-sm leading-relaxed">{restaurant.description}</div>
+                </div>
+              )}
+              <div className="space-y-2">
+                {restaurant.contact?.phone && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <Phone className="h-4 w-4 text-muted-foreground" />
+                    <span>{restaurant.contact.phone}</span>
+                  </div>
+                )}
+                {restaurant.contact?.email && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <Mail className="h-4 w-4 text-muted-foreground" />
+                    <span>{restaurant.contact.email}</span>
+                  </div>
+                )}
+                {restaurant.webId && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <Globe className="h-4 w-4 text-muted-foreground" />
+                    <a
+                      href={restaurant.webId.startsWith("http") ? restaurant.webId : `//${restaurant.webId}`}
+                      className="text-blue-600 hover:underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {restaurant.webId}
+                    </a>
+                  </div>
+                )}
+              </div>
+              {restaurant.address && (
+                <div className="flex items-start gap-2 text-sm">
+                  <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                  <div className="flex flex-wrap items-center gap-x-2">
+                    <span>{formatAddress(restaurant.address)}</span>
+                    {restaurant.address.googleMapsLink && (
+                      <a
+                        href={restaurant.address.googleMapsLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline text-xs"
+                      >
+                        (Map)
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-4">
+              {restaurant.operatingHours && (
+                <div className="bg-muted rounded-lg p-3">
+                  <div className="flex items-center gap-2 mb-1 text-muted-foreground text-xs font-medium">
+                    <CalendarClock className="h-4 w-4" /> Operating Hours
+                  </div>
+                  {restaurant.operatingHours.useIndividualDaySettings ? (
+                    <ul className="text-sm space-y-1 pl-1">
+                      {operatingHoursEntries.length > 0 ? (
+                        operatingHoursEntries.map(([day, hours]) => (
+                          <li key={day} className="capitalize grid grid-cols-[max-content_auto] gap-x-2">
+                            <span className="font-medium">{day}:</span>
+                            <span>{hours || "Closed"}</span>
+                          </li>
+                        ))
+                      ) : (
+                        <li className="text-muted-foreground">No specific day hours set.</li>
+                      )}
+                    </ul>
+                  ) : (
+                    <div className="text-sm space-y-1">
+                      <div>
+                        <span className="font-medium">Weekdays:</span> {restaurant.operatingHours.weekdays || "Not specified"}
+                      </div>
+                      <div>
+                        <span className="font-medium">Weekends:</span> {restaurant.operatingHours.weekends || "Not specified"}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div className="flex flex-col gap-1 text-xs text-muted-foreground">
+                {restaurant.createdAt && <span>Created: {new Date(restaurant.createdAt).toLocaleString()}</span>}
+                {restaurant.updatedAt && <span>Updated: {new Date(restaurant.updatedAt).toLocaleString()}</span>}
+              </div>
+            </div>
+          </div>
+        </ScrollArea>
       </CardContent>
     </Card>
   );
