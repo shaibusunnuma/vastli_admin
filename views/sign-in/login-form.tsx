@@ -28,7 +28,7 @@ export default function LoginForm() {
       const signInAttempt = await signIn.create(values);
       if (signInAttempt.status === "complete") {
         form.reset();
-        router.push("/reservations");
+        router.push("/");
       }
     } catch (error: any) {
       logger.error(error);
