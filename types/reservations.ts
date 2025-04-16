@@ -25,7 +25,7 @@ export enum PERIOD {
   ALL = "ALL",
 }
 
-export interface BookingStats {
+export interface ReservationStats {
   total: number;
   statusCounts: Record<string, number>;
   newBookings: {
