@@ -6,8 +6,13 @@ import { format } from "date-fns";
 
 interface Props {
   restaurant?: Restaurant;
+  customerStats?: CustomerStats;
+  reservationStats?: ReservationStats;
 }
-function RestaurantSummary({ restaurant }: Props) {
+import { ReservationStats } from "@/types/reservations";
+import { CustomerStats } from "@/types/users";
+
+function RestaurantSummary({ restaurant, customerStats, reservationStats }: Props) {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="grid grid-cols-4 gap-4">
@@ -36,8 +41,8 @@ function RestaurantSummary({ restaurant }: Props) {
             <Users className="h-4 w-4 text-pink-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">342</div>
-            <p className="text-xs text-muted-foreground">+12 this week</p>
+            <div className="text-2xl font-bold">{customerStats?.total}</div>
+            {/* Optionally: Add week-over-week change if you have the data */}
           </CardContent>
         </Card>
         <Card>
@@ -46,8 +51,8 @@ function RestaurantSummary({ restaurant }: Props) {
             <Calendar className="h-4 w-4 text-orange-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">128</div>
-            <p className="text-xs text-muted-foreground">+8 this week</p>
+            <div className="text-2xl font-bold">{reservationStats?.total}</div>
+            {/* Optionally: Add week-over-week change if you have the data */}
           </CardContent>
         </Card>
         <Card>
@@ -56,8 +61,8 @@ function RestaurantSummary({ restaurant }: Props) {
             <CreditCard className="h-4 w-4 text-emerald-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-lg font-bold">Standard</div>
-            <p className="text-xs text-muted-foreground">Next billing: Apr 15, 2025</p>
+            <div className="text-lg font-bold">—</div>
+            <p className="text-xs text-muted-foreground">—</p>
           </CardContent>
         </Card>
       </div>

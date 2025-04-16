@@ -2,12 +2,14 @@
 import React from "react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Store } from "lucide-react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { setRestaurantStats } from "@/lib/features/restaurants/restaurantSlice";
 import { Button } from "@/components/ui/button";
 import { Restaurant } from "@/types/restaurants";
 import { useGetCustomersStatsQuery } from "@/lib/services/customers/customerApiSlice";
 import { format } from "date-fns";
 import { useGetReservationStatsQuery } from "@/lib/services/reservations/reservationApiSlice";
+import { useAppDispatch } from "@/lib/hooks";
 
 export default function Row({ restaurant }: { restaurant: Restaurant }) {
   const { data: customerStats } = useGetCustomersStatsQuery({
@@ -17,6 +19,19 @@ export default function Row({ restaurant }: { restaurant: Restaurant }) {
   const { data: reservationStats } = useGetReservationStatsQuery({
     restaurantId: restaurant.id,
   });
+
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const handleView = () => {
+    dispatch(
+      setRestaurantStats({
+        customerStats,
+        reservationStats,
+      })
+    );
+    router.push(`/restaurants/${restaurant.id}`);
+  };
 
   return (
     <TableRow key={restaurant.id}>
@@ -48,11 +63,9 @@ export default function Row({ restaurant }: { restaurant: Restaurant }) {
       <TableCell>{reservationStats?.total}</TableCell>
       <TableCell>{format(new Date(restaurant.createdAt), "MMM dd, yyyy")}</TableCell>
       <TableCell className="text-right">
-        <Link href={`/restaurants/${restaurant.id}`}>
-          <Button variant="ghost" size="sm">
-            View
-          </Button>
-        </Link>
+        <Button variant="ghost" size="sm" onClick={handleView}>
+          View
+        </Button>
       </TableCell>
     </TableRow>
   );
