@@ -1,5 +1,5 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { BookingsResponse, PERIOD, Reservation } from "@/types/reservations";
+import { BookingsResponse, BookingStats, PERIOD, Reservation } from "@/types/reservations";
 import { axiosBaseQuery } from "@/lib/baseQuery";
 import { providesList } from "../../common";
 
@@ -34,6 +34,13 @@ export const reservationApiSlice = createApi({
         params: filter,
       }),
       providesTags: (result, error, filter) => providesList(result, "Reservations", JSON.stringify(filter)),
+    }),
+    getReservationStats: build.query<BookingStats, Partial<Reservation>>({
+      query: (filter) => ({
+        url: "/stats",
+        params: filter,
+      }),
+      providesTags: (result, error, filter) => [{ type: "Reservations", id: "STATS" }],
     }),
     getReservationById: build.query<Reservation, string>({
       query: (reservationId) => ({
