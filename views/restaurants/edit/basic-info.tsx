@@ -26,15 +26,18 @@ function BasicInfo({ restaurant }: Props) {
     },
   });
   const {
-    formState: { isSubmitting, isDirty },
+    formState: { isSubmitting, isDirty }, reset
   } = form;
 
   const onSubmit = async (data: BasicInfoType) => {
     try {
-      await updateRestaurant({
+      const res = await updateRestaurant({
         id: restaurant.id,
         ...data,
       }).unwrap();
+      reset({
+        ...res
+      });
     } catch (error: any) {
       logger.error(error);
       const msg = error.data.message || "Error updating restaurant";

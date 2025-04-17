@@ -1,9 +1,8 @@
 "use client";
-import { use, useState } from "react";
-import Link from "next/link";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Edit, MoreHorizontal, Store } from "lucide-react";
+import { Eye, MoreHorizontal, Store } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,10 +11,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useGetRestaurantByIdQuery } from "@/lib/services/restaurants/restaurantApiSlice";
-
-import { selectRestaurantStats } from "@/lib/features/restaurants/restaurantSlice";
-import { useAppSelector } from "@/lib/hooks";
 import { Restaurant } from "@/types/restaurants";
 import BasicInfo from "./basic-info";
 import RestaurantSettings from "./restaurant-settings";
@@ -44,8 +39,8 @@ export default function EditRestaurant({ restaurant, setMode }: Props) {
         </div>
         <div className="flex items-center gap-2">
           <Button onClick={() => setMode("view")} variant="outline">
-            <Edit className="mr-2 h-4 w-4" />
-            Edit
+            <Eye className="mr-2 h-4 w-4" />
+            View
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

@@ -41,16 +41,20 @@ function RestaurantSettings({ restaurant }: Props) {
     watch,
     setValue,
     trigger,
+    reset
   } = form;
   const useIndividualDaySettings = watch("operatingHours.useIndividualDaySettings");
 
-  const onSubmit = (data: SettingsAndHoursType) => {
+  const onSubmit = async (data: SettingsAndHoursType) => {
     try {
-      updateRestaurant({
+      const res = await updateRestaurant({
         id: restaurant.id,
         reservationSettings: { ...restaurant.reservationSettings, ...data.reservationSettings },
         operatingHours: { ...restaurant.operatingHours, ...data.operatingHours },
       }).unwrap();
+      reset({
+        ...res
+      });
     } catch (error: any) {
       logger.error(error);
       const msg = error.data.message || "Error updating restaurant settings";
