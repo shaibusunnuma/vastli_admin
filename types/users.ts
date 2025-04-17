@@ -44,6 +44,19 @@ export interface Operator extends User {
   inviter?: string;
 }
 
+export interface Session {
+  id: string;
+  userId: string;
+  token: string;
+  expires: Date;
+  revoked: boolean;
+  deviceId: string;
+  deviceName: string;
+  deviceType: string;
+  lastUsed: Date;
+  createdAt: Date;
+}
+
 export interface Customer extends User {
   visits: number;
   lastVisit: string;

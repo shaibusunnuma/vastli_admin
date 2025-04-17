@@ -1,12 +1,12 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { axiosBaseQuery } from "@/lib/baseQuery";
 import { providesList } from "../../common";
-import { Operator, UserResponse } from "@/types/users";
+import { Operator, Session, UserResponse } from "@/types/users";
 
 export const userApiSlice = createApi({
   reducerPath: "userApi",
   baseQuery: axiosBaseQuery({ baseUrl: "operators" }),
-  tagTypes: ["Operator"],
+  tagTypes: ["Operator", "OperatorSession"],
   endpoints: (build) => ({
     getOperators: build.query<UserResponse<Operator>, Partial<Operator>>({
       query: (filter) => ({
@@ -21,6 +21,13 @@ export const userApiSlice = createApi({
         url: `/${userId}`,
       }),
       providesTags: (result, error, userId) => [{ type: "Operator", id: userId }],
+    }),
+
+    getOperatorSessions: build.query<Session[], string>({
+      query: (userId) => ({
+        url: `sessions/${userId}`,
+      }),
+      providesTags: (result, error, userId) => [{ type: "OperatorSession", id: userId }],
     }),
 
     inviteOperator: build.mutation<Operator, Partial<Operator> & { restaurant?: string }>({
@@ -67,6 +74,7 @@ export const userApiSlice = createApi({
 export const {
   useGetOperatorsQuery,
   useGetOperatorByIdQuery,
+  useGetOperatorSessionsQuery,
   useInviteOperatorMutation,
   useUpdateOperatorMutation,
   useDeleteOperatorMutation,
