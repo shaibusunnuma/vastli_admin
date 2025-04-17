@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ChevronDown, Filter, Search } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Restaurant } from "@/types/restaurants";
 import { useGetCustomersQuery } from "@/lib/services/customers/customerApiSlice";
@@ -61,10 +61,6 @@ export default function Customers({ restaurant }: Props) {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Customer Management</CardTitle>
-        <CardDescription>View and manage customers for {restaurant?.name}</CardDescription>
-      </CardHeader>
       <CardContent>
         <div className="flex items-center py-4">
           <Input
