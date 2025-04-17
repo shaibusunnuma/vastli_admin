@@ -1,9 +1,9 @@
 import React from "react";
 
-import DetailsCard from "@/views/restaurants/overview/details";
-import OwnerInfo from "@/views/restaurants/overview/owner-info";
-import MenuAndReservation from "@/views/restaurants/overview/menu-and-reservation";
-import BillingInfo from "@/views/restaurants/overview/billing-info";
+import DetailsCard from "@/views/restaurants/view/overview/details";
+import OwnerInfo from "@/views/restaurants/view/overview/owner-info";
+import MenuAndReservation from "@/views/restaurants/view/overview/menu-and-reservation";
+import BillingInfo from "@/views/restaurants/view/overview/billing-info";
 import { Restaurant } from "@/types/restaurants";
 
 interface Props {
