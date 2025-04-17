@@ -20,6 +20,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { columns } from "./columns";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useDebouncedCallback } from "@/lib/utils";
 
 interface Props {
   restaurant?: Restaurant;
@@ -27,6 +28,7 @@ interface Props {
 export default function Customers({ restaurant }: Props) {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [query, setQuery] = useState<string>("");
 
   const {
     data: customers,
@@ -35,6 +37,7 @@ export default function Customers({ restaurant }: Props) {
   } = useGetCustomersQuery(
     {
       filter: { restaurants: [restaurant?.id || ""], page, limit: pageSize },
+      query,
     },
     { skip: !restaurant }
   );
@@ -64,16 +67,13 @@ export default function Customers({ restaurant }: Props) {
     },
   });
 
+  const debouncedSearch = useDebouncedCallback((value: string) => setQuery(value), 300);
+
   return (
     <Card>
       <CardContent>
         <div className="flex items-center py-4">
-          <Input
-            placeholder="Filter emails..."
-            value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-            onChange={(event) => table.getColumn("email")?.setFilterValue(event.target.value)}
-            className="max-w-sm"
-          />
+          <Input placeholder="Filter name, phone, email" onChange={(event) => debouncedSearch(event.target.value)} className="max-w-sm" />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">

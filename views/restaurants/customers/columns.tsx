@@ -52,10 +52,18 @@ export const columns: ColumnDef<Customer>[] = [
     cell: ({ row }) => <div className="lowercase">{row.getValue("lastName")}</div>,
   },
   {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("status")}</div>,
+    accessorKey: "phone",
+    header: ({ column }) => {
+      return (
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          Phone
+          <ArrowUpDown />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div className="lowercase">{row.getValue("phone")}</div>,
   },
+
   {
     accessorKey: "email",
     header: ({ column }) => {
@@ -67,6 +75,11 @@ export const columns: ColumnDef<Customer>[] = [
       );
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("status")}</div>,
   },
   {
     id: "actions",
