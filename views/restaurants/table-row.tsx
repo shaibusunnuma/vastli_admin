@@ -13,7 +13,7 @@ import { useAppDispatch } from "@/lib/hooks";
 
 export default function Row({ restaurant }: { restaurant: Restaurant }) {
   const { data: customerStats } = useGetCustomersStatsQuery({
-    restaurantId: restaurant.id,
+    restaurants: [restaurant.id],
   });
 
   const { data: reservationStats } = useGetReservationStatsQuery({

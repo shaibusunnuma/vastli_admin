@@ -1,9 +1,8 @@
 "use client";
-import { use, useState } from "react";
-import Link from "next/link";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Edit, MoreHorizontal, Store } from "lucide-react";
+import { Edit, MoreHorizontal, Store } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
