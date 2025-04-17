@@ -16,6 +16,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { columns } from "./columns";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -54,6 +55,7 @@ export default function Customers({ restaurant }: Props) {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    manualPagination: true,
     state: {
       sorting,
       columnFilters,
@@ -152,22 +154,26 @@ export default function Customers({ restaurant }: Props) {
               variant="outline"
               size="sm"
               onClick={() => setPage((prev: number) => (customers?.metadata?.hasNextPage ? prev + 1 : prev))}
-              disabled={customers?.metadata?.hasNextPage === false || (customers?.metadata?.lastPage !== undefined && page >= customers.metadata.lastPage)}
+              disabled={
+                customers?.metadata?.hasNextPage === false || (customers?.metadata?.lastPage !== undefined && page >= customers.metadata.lastPage)
+              }
             >
               Next
             </Button>
-            <select
-              className="ml-2 border rounded px-2 py-1 text-sm"
-              value={pageSize}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                setPageSize(Number(e.target.value));
-                setPage(1); // Reset to first page when page size changes
-              }}
-            >
-              {[5, 10, 20, 50].map((size) => (
-                <option key={size} value={size}>{size} / page</option>
-              ))}
-            </select>
+            <Select value={pageSize.toString()} onValueChange={(value) => setPageSize(Number(value))}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Page Size" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {[5, 10, 20, 50].map((size) => (
+                    <SelectItem key={size} value={size.toString()}>
+                      {size} / page
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </CardContent>
