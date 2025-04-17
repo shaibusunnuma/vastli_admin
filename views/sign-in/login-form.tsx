@@ -23,6 +23,8 @@ export default function LoginForm() {
     resolver: zodResolver(formSchema),
   });
 
+  const {formState: {isSubmitting}} = form
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       const signInAttempt = await signIn.create(values);
@@ -75,7 +77,7 @@ export default function LoginForm() {
             )}
           />
 
-          <Button type="submit">Submit</Button>
+          <Button disabled={isSubmitting} type="submit">{isSubmitting ? "Logging in..." : "Login"}</Button>
         </div>
       </form>
     </Form>

@@ -3,28 +3,20 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { 
-  LayoutDashboard, 
-  Store, 
-  Users, 
-  Calendar, 
-  CreditCard,
-  Settings,
-  LogOut
-} from "lucide-react";
+import { LayoutDashboard, Store, Users, Calendar, CreditCard, Settings } from "lucide-react";
 
 const routes = [
   {
     label: "Dashboard",
     icon: LayoutDashboard,
     href: "/",
-    color: "text-sky-500"
+    color: "text-sky-500",
   },
   {
     label: "Restaurants",
     icon: Store,
     href: "/restaurants",
-    color: "text-violet-500"
+    color: "text-violet-500",
   },
   {
     label: "Customers",
@@ -72,12 +64,6 @@ export function Sidebar() {
             {route.label}
           </Link>
         ))}
-      </div>
-      <div className="mt-auto p-4 border-t">
-        <button className="flex items-center gap-x-2 text-sm font-medium p-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all text-gray-500 dark:text-gray-400 w-full">
-          <LogOut className="h-5 w-5 text-gray-500" />
-          Logout
-        </button>
       </div>
     </div>
   );
