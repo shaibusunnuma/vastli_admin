@@ -3,7 +3,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"; // Import Form components
 import { Save } from "lucide-react";
 import { Restaurant } from "@/types/restaurants";
-import { BasicInfoSchema, BasicInfoType } from "./schemas";
+import { BasicInfoSchema, BasicInfoType } from "../onboard/schemas";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardHeader, CardContent, CardDescription, CardFooter, CardTitle } from "@/components/ui/card";

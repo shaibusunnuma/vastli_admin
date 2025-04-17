@@ -5,9 +5,9 @@ import { Card, CardHeader, CardContent, CardDescription, CardFooter, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { ArrowLeft, ArrowRight, Save } from "lucide-react";
-import { Restaurant, Step } from "@/types/restaurants";
-import { SettingsAndHoursSchema, SettingsAndHoursType, OperatingHoursType } from "./schemas"; // Adjust path
+import { Save } from "lucide-react";
+import { Restaurant } from "@/types/restaurants";
+import { SettingsAndHoursSchema, SettingsAndHoursType } from "../onboard/schemas";
 import NumberInput from "@/components/number-input";
 import { TimeIntervalInput } from "@/components/TimeIntervalInput";
 import { Separator } from "@/components/ui/separator";
