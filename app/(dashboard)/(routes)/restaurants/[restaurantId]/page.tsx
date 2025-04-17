@@ -97,7 +97,7 @@ export default function RestaurantDetailPage({ params }: { params: Promise<{ res
         </TabsContent>
 
         <TabsContent value="customers">
-          <Customers />
+          <Customers restaurant={data} />
         </TabsContent>
 
         <TabsContent value="reservations">

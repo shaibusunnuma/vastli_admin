@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Search, Filter, Download, User, Loader2 } from "lucide-react";
-import { useGetCustomersQuery } from "@/lib/services/customers/customerApiSlice";
+import { useGetCustomersQuery, useGetCustomersStatsQuery } from "@/lib/services/customers/customerApiSlice";
 
 export default function CustomersPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -14,13 +14,19 @@ export default function CustomersPage() {
     totalCustomers: 0,
     activeToday: 0,
     newThisWeek: 0,
-    avgReservations: 0
+    avgReservations: 0,
   });
 
-  const { data: customerResponse, error: fetchError, isLoading } = useGetCustomersQuery({
+  const {
+    data: customerResponse,
+    error: fetchError,
+    isLoading,
+  } = useGetCustomersQuery({
     filter: { page, limit: 10 },
-    query: searchQuery.length > 0 ? searchQuery : undefined
+    query: searchQuery.length > 0 ? searchQuery : undefined,
   });
+
+  const { data: statsResponse, error: statsError, isLoading: statsLoading } = useGetCustomersStatsQuery({});
 
   const customers = customerResponse?.data || [];
   const metadata = customerResponse?.metadata;
@@ -29,21 +35,23 @@ export default function CustomersPage() {
     // Calculate customer stats
     const activeToday = Math.floor(metadata.total * 0.07); // ~7% of customers active today
     const newThisWeek = Math.floor(metadata.total * 0.03); // ~3% new customers this week
-    
+
     // Calculate average reservations
     const totalReservations = customers.reduce((sum, customer) => sum + (customer.reservations || 0), 0);
     const avgReservations = customers.length > 0 ? parseFloat((totalReservations / customers.length).toFixed(1)) : 0;
-    
+
     // Only update stats if they've changed to avoid infinite re-renders
-    if (stats.totalCustomers !== metadata.total || 
-        stats.activeToday !== activeToday || 
-        stats.newThisWeek !== newThisWeek || 
-        stats.avgReservations !== avgReservations) {
+    if (
+      stats.totalCustomers !== metadata.total ||
+      stats.activeToday !== activeToday ||
+      stats.newThisWeek !== newThisWeek ||
+      stats.avgReservations !== avgReservations
+    ) {
       setStats({
         totalCustomers: metadata.total,
         activeToday,
         newThisWeek,
-        avgReservations
+        avgReservations,
       });
     }
   }
@@ -79,58 +87,42 @@ export default function CustomersPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Customers
-            </CardTitle>
+            <CardTitle className="text-sm font-medium">Total Customers</CardTitle>
             <User className="h-4 w-4 text-pink-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalCustomers.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
-              +{Math.floor(stats.totalCustomers * 0.013).toLocaleString()} this month
-            </p>
+            <p className="text-xs text-muted-foreground">+{Math.floor(stats.totalCustomers * 0.013).toLocaleString()} this month</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Active Today
-            </CardTitle>
+            <CardTitle className="text-sm font-medium">Active Today</CardTitle>
             <User className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.activeToday.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
-              +12% from yesterday
-            </p>
+            <p className="text-xs text-muted-foreground">+12% from yesterday</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              New This Week
-            </CardTitle>
+            <CardTitle className="text-sm font-medium">New This Week</CardTitle>
             <User className="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.newThisWeek.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
-              +18% from last week
-            </p>
+            <p className="text-xs text-muted-foreground">+18% from last week</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Avg. Reservations
-            </CardTitle>
+            <CardTitle className="text-sm font-medium">Avg. Reservations</CardTitle>
             <User className="h-4 w-4 text-orange-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.avgReservations}</div>
-            <p className="text-xs text-muted-foreground">
-              Per customer
-            </p>
+            <p className="text-xs text-muted-foreground">Per customer</p>
           </CardContent>
         </Card>
       </div>
@@ -138,17 +130,15 @@ export default function CustomersPage() {
       <Card>
         <CardHeader>
           <CardTitle>Customer Management</CardTitle>
-          <CardDescription>
-            View and manage all customers across restaurants
-          </CardDescription>
+          <CardDescription>View and manage all customers across restaurants</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSearch} className="flex items-center justify-between mb-4">
             <div className="relative w-full max-w-sm">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
-              <input 
-                type="text" 
-                placeholder="Search customers..." 
+              <input
+                type="text"
+                placeholder="Search customers..."
                 className="pl-10 pr-4 py-2 w-full rounded-md border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -161,9 +151,7 @@ export default function CustomersPage() {
           </form>
 
           {Boolean(fetchError) && (
-            <div className="bg-red-50 text-red-800 p-4 rounded-md mb-4">
-              An error occurred while loading customers. Please try again.
-            </div>
+            <div className="bg-red-50 text-red-800 p-4 rounded-md mb-4">An error occurred while loading customers. Please try again.</div>
           )}
 
           {isLoading ? (
@@ -198,8 +186,8 @@ export default function CustomersPage() {
                           <div className="flex items-center">
                             <div className="mr-2 h-8 w-8 rounded-full bg-pink-100 flex items-center justify-center">
                               {customer.imageUrl ? (
-                                <img 
-                                  src={customer.imageUrl} 
+                                <img
+                                  src={customer.imageUrl}
                                   alt={`${customer.firstName} ${customer.lastName}`}
                                   className="h-8 w-8 rounded-full object-cover"
                                 />
@@ -213,26 +201,24 @@ export default function CustomersPage() {
                         <TableCell>{customer.email}</TableCell>
                         <TableCell>
                           <div className="flex flex-wrap gap-1">
-                            {customer.restaurants && customer.restaurants.map((restaurant, index) => (
-                              <span 
-                                key={index} 
-                                className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-xs"
-                              >
-                                {restaurant}
-                              </span>
-                            ))}
+                            {customer.restaurants &&
+                              customer.restaurants.map((restaurant, index) => (
+                                <span key={index} className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-xs">
+                                  {restaurant}
+                                </span>
+                              ))}
                           </div>
                         </TableCell>
                         <TableCell>{customer.reservations}</TableCell>
+                        <TableCell>{customer.lastActive ? new Date(customer.lastActive).toLocaleDateString() : "Never"}</TableCell>
                         <TableCell>
-                          {customer.lastActive ? new Date(customer.lastActive).toLocaleDateString() : "Never"}
-                        </TableCell>
-                        <TableCell>
-                          {customer.createdAt ? new Date(customer.createdAt).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric'
-                          }) : "Unknown"}
+                          {customer.createdAt
+                            ? new Date(customer.createdAt).toLocaleDateString("en-US", {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                              })
+                            : "Unknown"}
                         </TableCell>
                         <TableCell className="text-right">
                           <Button variant="ghost" size="sm">
@@ -244,7 +230,7 @@ export default function CustomersPage() {
                   )}
                 </TableBody>
               </Table>
-              
+
               <div className="flex items-center justify-between mt-4">
                 <div className="text-sm text-gray-500">
                   {metadata && (
@@ -256,20 +242,10 @@ export default function CustomersPage() {
                   )}
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={handlePreviousPage}
-                    disabled={page <= 1 || isLoading}
-                  >
+                  <Button variant="outline" size="sm" onClick={handlePreviousPage} disabled={page <= 1 || isLoading}>
                     Previous
                   </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={handleNextPage}
-                    disabled={!metadata?.hasNextPage || isLoading}
-                  >
+                  <Button variant="outline" size="sm" onClick={handleNextPage} disabled={!metadata?.hasNextPage || isLoading}>
                     Next
                   </Button>
                 </div>
