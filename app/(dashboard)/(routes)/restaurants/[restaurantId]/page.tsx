@@ -84,11 +84,11 @@ export default function RestaurantDetailPage({ params }: { params: Promise<{ res
       />
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="customers">Customers</TabsTrigger>
           <TabsTrigger value="reservations">Reservations</TabsTrigger>
-          <TabsTrigger value="billing">Billing</TabsTrigger>
+          {/* <TabsTrigger value="billing">Billing</TabsTrigger> */}
           <TabsTrigger value="users">Users</TabsTrigger>
         </TabsList>
 
@@ -104,9 +104,9 @@ export default function RestaurantDetailPage({ params }: { params: Promise<{ res
           <Reservations restaurant={data} />
         </TabsContent>
 
-        <TabsContent value="billing">
+        {/* <TabsContent value="billing">
           <Billing />
-        </TabsContent>
+        </TabsContent> */}
 
         <TabsContent value="users">
           <UsersTab accountId={data?.accountId} />
