@@ -3,40 +3,30 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Filter, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-const restaurant = {
-  name: "Bella Italia",
-  type: "Italian",
-  description: "Authentic Italian cuisine in the heart of San Francisco.",
-  address: "123 Main St, San Francisco, CA 94105, United States",
-  phone: "(555) 123-4567",
-  email: "info@bellaitalia.com",
-  website: "https://bellaitalia.com",
-  status: "Active",
-  joinedDate: "Mar 15, 2025",
-  owner: "John Doe",
-  ownerEmail: "john@bellaitalia.com",
-  cuisine: "Italian",
-  priceRange: "$$",
-  seating: 50,
-  reservationInterval: 30,
-  plan: "Standard",
-  billingCycle: "Monthly",
-  nextBillingDate: "Apr 15, 2025",
-  paymentMethod: "Visa ending in 4242",
-};
-export default function Customers() {
-  const customers = [
-    { id: "cust-001", name: "Alice Johnson", email: "alice@example.com", reservations: 8, lastVisit: "Mar 24, 2025" },
-    { id: "cust-002", name: "Bob Smith", email: "bob@example.com", reservations: 5, lastVisit: "Mar 20, 2025" },
-    { id: "cust-003", name: "Carol Williams", email: "carol@example.com", reservations: 12, lastVisit: "Mar 25, 2025" },
-    { id: "cust-004", name: "David Brown", email: "david@example.com", reservations: 3, lastVisit: "Mar 15, 2025" },
-    { id: "cust-005", name: "Eve Davis", email: "eve@example.com", reservations: 7, lastVisit: "Mar 22, 2025" },
-  ];
+import { Restaurant } from "@/types/restaurants";
+import { useGetCustomersQuery } from "@/lib/services/customers/customerApiSlice";
+
+
+interface Props {
+  restaurant?: Restaurant;
+}
+export default function Customers({ restaurant }: Props) {
+  const {
+    data: customers,
+    error,
+    isLoading,
+  } = useGetCustomersQuery(
+    {
+      filter: { restaurantId: restaurant?.id, page: 1, limit: 10 },
+    },
+    { skip: !restaurant }
+  );
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Customer Management</CardTitle>
-        <CardDescription>View and manage customers for {restaurant.name}</CardDescription>
+        <CardDescription>View and manage customers for {restaurant?.name}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex items-center justify-between mb-4">
@@ -65,9 +55,11 @@ export default function Customers() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {customers.map((customer) => (
+            {customers?.data.map((customer) => (
               <TableRow key={customer.id}>
-                <TableCell className="font-medium">{customer.name}</TableCell>
+                <TableCell className="font-medium">
+                  {customer.firstName} {customer.lastName}
+                </TableCell>
                 <TableCell>{customer.email}</TableCell>
                 <TableCell>{customer.reservations}</TableCell>
                 <TableCell>{customer.lastVisit}</TableCell>

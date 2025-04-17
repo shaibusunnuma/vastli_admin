@@ -17,17 +17,14 @@ export default function CustomersPage() {
     avgReservations: 0
   });
 
-  // Use RTK Query to fetch customers
   const { data: customerResponse, error: fetchError, isLoading } = useGetCustomersQuery({
     filter: { page, limit: 10 },
     query: searchQuery.length > 0 ? searchQuery : undefined
   });
 
-  // Extract customers and metadata from the response
   const customers = customerResponse?.data || [];
   const metadata = customerResponse?.metadata;
 
-  // Calculate stats when data is available
   if (customers.length > 0 && page === 1 && !searchQuery && metadata) {
     // Calculate customer stats
     const activeToday = Math.floor(metadata.total * 0.07); // ~7% of customers active today
