@@ -24,13 +24,16 @@ interface Props {
   restaurant?: Restaurant;
 }
 export default function Customers({ restaurant }: Props) {
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
   const {
     data: customers,
     error,
     isLoading,
   } = useGetCustomersQuery(
     {
-      filter: { restaurants: [restaurant?.id || ""], page: 1, limit: 2 },
+      filter: { restaurants: [restaurant?.id || ""], page, limit: pageSize },
     },
     { skip: !restaurant }
   );
@@ -133,13 +136,38 @@ export default function Customers({ restaurant }: Props) {
           <div className="flex-1 text-sm text-muted-foreground">
             {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s) selected.
           </div>
-          <div className="space-x-2">
-            <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+          <div className="space-x-2 items-center flex">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage((prev: number) => Math.max(prev - 1, 1))}
+              disabled={customers?.metadata?.hasPrevPage === false || page === 1}
+            >
               Previous
             </Button>
-            <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+            <span>
+              Page {customers?.metadata?.page ?? page} of {customers?.metadata?.lastPage ?? 1}
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage((prev: number) => (customers?.metadata?.hasNextPage ? prev + 1 : prev))}
+              disabled={customers?.metadata?.hasNextPage === false || (customers?.metadata?.lastPage !== undefined && page >= customers.metadata.lastPage)}
+            >
               Next
             </Button>
+            <select
+              className="ml-2 border rounded px-2 py-1 text-sm"
+              value={pageSize}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                setPageSize(Number(e.target.value));
+                setPage(1); // Reset to first page when page size changes
+              }}
+            >
+              {[5, 10, 20, 50].map((size) => (
+                <option key={size} value={size}>{size} / page</option>
+              ))}
+            </select>
           </div>
         </div>
       </CardContent>
