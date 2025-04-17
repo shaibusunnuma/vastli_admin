@@ -30,26 +30,22 @@ const routes = [
     label: "Customers",
     icon: Users,
     href: "/customers",
-    color: "text-pink-500"
   },
   {
     label: "Reservations",
     icon: Calendar,
     href: "/reservations",
-    color: "text-orange-500"
   },
-  {
-    label: "Billing",
-    icon: CreditCard,
-    href: "/billing",
-    color: "text-emerald-500"
-  },
-  {
-    label: "Settings",
-    icon: Settings,
-    href: "/settings",
-    color: "text-gray-500"
-  }
+  // {
+  //   label: "Billing",
+  //   icon: CreditCard,
+  //   href: "/billing",
+  // },
+  // {
+  //   label: "Settings",
+  //   icon: Settings,
+  //   href: "/settings",
+  // }
 ];
 
 export function Sidebar() {
@@ -72,7 +68,7 @@ export function Sidebar() {
               pathname === route.href ? "bg-gray-100 dark:bg-gray-800 text-black dark:text-white" : "text-gray-500 dark:text-gray-400"
             )}
           >
-            <route.icon className={cn("h-5 w-5", route.color)} />
+            <route.icon className="h-5 w-5" />
             {route.label}
           </Link>
         ))}
