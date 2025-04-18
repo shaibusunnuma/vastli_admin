@@ -45,24 +45,24 @@ export default function UsersTab({ accountId }: UsersTabProps) {
                 <td className="px-4 py-2 capitalize">{user.role}</td>
                 <td className="px-4 py-2">{user.status}</td>
                 <td className="px-4 py-2">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem asChild>
-                        <UserDetails user={user} />
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <UserEditForm user={user} />
-                      </DropdownMenuItem>
-                      <DeactivateUserMenuItem user={user} />
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <div className="flex-row gap-2 w-full">
+                    <UserEditForm user={user} />
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                          <UserDetails user={user} />
+                        </DropdownMenuItem>
+                        <DeactivateUserMenuItem user={user} />
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </td>
               </tr>
             ))}

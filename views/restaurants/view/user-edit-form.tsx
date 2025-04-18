@@ -19,6 +19,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { Operator } from "@/types/users";
 import { toast } from "sonner";
 import logger from "@/lib/logger";
+import { Pencil } from "lucide-react";
 
 const userEditSchema = z.object({
   firstName: z.string().min(1, "Required"),
@@ -60,7 +61,9 @@ export default function UserEditForm({ user }: UserEditFormProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost" className="text-left text-sm block w-full p-2">Edit</Button>
+        <Button variant="ghost" size="icon">
+          <Pencil className="h-4 w-4" />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
