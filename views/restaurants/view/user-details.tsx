@@ -25,7 +25,7 @@ export default function UserDetails({ user }: UserDetailsProps) {
   return (
     <Dialog>
       <DialogTrigger>
-      <p className="text-left text-sm block w-full p-2">View</p>
+      <Button variant="ghost" className="text-left text-sm block w-full p-2">View</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

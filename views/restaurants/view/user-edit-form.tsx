@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -61,7 +60,7 @@ export default function UserEditForm({ user }: UserEditFormProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <p className="text-left text-sm block w-full p-2">Edit</p>
+        <Button variant="ghost" className="text-left text-sm block w-full p-2">Edit</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
