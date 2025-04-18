@@ -18,6 +18,8 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Operator } from "@/types/users";
+import { toast } from "sonner";
+import logger from "@/lib/logger";
 
 const userEditSchema = z.object({
   firstName: z.string().min(1, "Required"),
@@ -29,12 +31,10 @@ const userEditSchema = z.object({
 
 export interface UserEditFormProps {
   user: Operator;
-  onSuccess?: () => void;
 }
 
-export default function UserEditForm({ user, onSuccess }: UserEditFormProps) {
+export default function UserEditForm({ user }: UserEditFormProps) {
   const [updateOperator, { isLoading }] = useUpdateOperatorMutation();
-  const [error, setError] = useState<string | null>(null);
   const form = useForm({
     resolver: zodResolver(userEditSchema),
     defaultValues: { ...user },
@@ -43,16 +43,17 @@ export default function UserEditForm({ user, onSuccess }: UserEditFormProps) {
 
   const {
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isDirty },
   } = form;
 
   const onSubmit = async (values: any) => {
-    setError(null);
     try {
       await updateOperator({ id: user.id, ...values }).unwrap();
-      if (onSuccess) onSuccess();
-    } catch (e: any) {
-      setError(e?.data?.message || "Failed to update user");
+      toast.success('User updated successfully')
+    } catch (error: any) {
+      logger.error(error);
+      const msg = error?.data?.message || "Failed to update user";
+      toast.error(msg);
     }
   };
 
@@ -153,10 +154,9 @@ export default function UserEditForm({ user, onSuccess }: UserEditFormProps) {
                 </FormItem>
               )}
             />
-            {error && <div className="text-xs text-red-500">{error}</div>}
             <DialogFooter>
-              <Button type="submit" disabled={isSubmitting}>
-                Save
+              <Button type="submit" disabled={isSubmitting || !isDirty}>
+                {isSubmitting ? "Updating..." : "Update"}
               </Button>
               <DialogClose asChild>
                 <Button variant="outline" type="button">
