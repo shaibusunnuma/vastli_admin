@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import UserDetails from "./user-details";
 import UserEditForm from "./user-edit-form";
+import DeactivateUserMenuItem from "./deactivate-user-menu-item";
 
 interface UsersTabProps {
   accountId?: string;
@@ -59,7 +60,7 @@ export default function UsersTab({ accountId }: UsersTabProps) {
                       <DropdownMenuItem asChild>
                         <UserEditForm user={user} />
                       </DropdownMenuItem>
-                      <DropdownMenuItem variant="destructive">Deactivate</DropdownMenuItem>
+                      <DeactivateUserMenuItem user={user} />
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </td>
