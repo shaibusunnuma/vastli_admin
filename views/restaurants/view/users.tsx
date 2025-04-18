@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import UserDetails from "./user-details";
+import UserEditForm from "./user-edit-form";
 
 interface UsersTabProps {
   accountId?: string;
@@ -49,13 +50,15 @@ export default function UsersTab({ accountId }: UsersTabProps) {
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
+                    <DropdownMenuContent>
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem asChild>
                         <UserDetails user={user} />
                       </DropdownMenuItem>
-                      <DropdownMenuItem>Edit</DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <UserEditForm user={user} />
+                      </DropdownMenuItem>
                       <DropdownMenuItem variant="destructive">Deactivate</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

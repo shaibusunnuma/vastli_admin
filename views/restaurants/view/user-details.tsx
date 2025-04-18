@@ -24,7 +24,9 @@ export default function UserDetails({ user }: UserDetailsProps) {
   if (!user) return null;
   return (
     <Dialog>
-      <DialogTrigger className="text-sm p-2">View</DialogTrigger>
+      <DialogTrigger>
+      <p className="text-left text-sm block w-full p-2">View</p>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>User Details</DialogTitle>
