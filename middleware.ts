@@ -9,13 +9,11 @@ interface DecodedToken {
   [key: string]: any;
 }
 
-// Paths that don't require authentication
 const publicPaths = ['/sign-in', '/sign-up', '/forgot-password', '/reset-password'];
 
 // Paths that should redirect to dashboard if already authenticated
 const authOnlyPaths = [...publicPaths];
 
-// Function to check if the path is public
 const isPublicPath = (path: string) => {
   return publicPaths.some((publicPath) => path.startsWith(publicPath));
 };
@@ -28,35 +26,28 @@ const isAuthOnlyPath = (path: string) => {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
-  // Get auth token from cookies
   const accessToken = request.cookies.get('access_token')?.value;
   const refreshToken = request.cookies.get('refresh_token')?.value;
   
-  // Check if access token exists and is valid
   let isAuthenticated = false;
   let tokenExpired = false;
   
   if (accessToken) {
     try {
-      // Decode the JWT token to check expiration
       const decoded = jwtDecode<DecodedToken>(accessToken);
       const currentTime = Math.floor(Date.now() / 1000);
       
       if (decoded.exp > currentTime) {
-        // Token is still valid
         isAuthenticated = true;
       } else {
-        // Token has expired
         tokenExpired = true;
       }
     } catch (error) {
-      // Invalid token format
       tokenExpired = true;
     }
   }
   
-  // If token is expired but refresh token exists, let the client handle refresh
-  // The auth client will handle token refresh on API calls
+
   if (tokenExpired && refreshToken) {
     // Allow the request to proceed - client-side auth will handle refresh
     isAuthenticated = true;
@@ -78,7 +69,6 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// Configure the middleware to run on specific paths
 export const config = {
   matcher: [
     /*

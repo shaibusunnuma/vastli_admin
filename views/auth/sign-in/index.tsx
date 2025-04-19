@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useAuth } from "@/lib/AuthProvider";
 import logger from "@/lib/logger";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 const formSchema = z.object({
@@ -17,6 +17,8 @@ const formSchema = z.object({
 });
 
 export default function Login() {
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
   const router = useRouter();
   const { signIn } = useAuth();
 
@@ -31,7 +33,7 @@ export default function Login() {
       const signInAttempt = await signIn.create(values);
       if (signInAttempt.status === "complete") {
         form.reset();
-        router.push("/");
+        router.push(callbackUrl);
       }
     } catch (error: any) {
       logger.error(error);
