@@ -80,6 +80,15 @@ export const authClient = {
     }
   },
 
+  async attemptFirstFactor(params: { email: string; code: string; password?: string }) {
+    try {
+      const { data } = await client.post("reset-password", { ...params, deviceInfo });
+      return data;
+    } catch (error: any) {
+      throw ApiErrorHandler(error, "Failed to attempt first factor");
+    }
+  },
+
   async getUser() {
     try {
       const { data } = await client.get("user");

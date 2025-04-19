@@ -61,6 +61,24 @@ export function authHook() {
           throw error;
         }
       },
+
+      attemptFirstFactor: async (data: { strategy: string; code: string; password: string; email: string }) => {
+        try {
+          const response = await authClient.attemptFirstFactor(data);
+          if (response.status === "complete") {
+            const { user } = response;
+            setState({
+              isSignedIn: true,
+              userId: user.id,
+              user,
+              isLoading: false,
+            });
+          }
+          return response;
+        } catch (error: any) {
+          throw error;
+        }
+      },
     };
   }, []);
 
