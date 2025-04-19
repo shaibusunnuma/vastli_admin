@@ -33,7 +33,7 @@ export const ForgotPassword = () => {
       await signIn.prepareFirstFactor({
         email,
       });
-      router.push(`/create-password/${email}`);
+      router.push(`/reset-password/${email}`);
     } catch (error: any) {
       logger.error(error);
       const msg = error.message || "Error sending code";
@@ -65,7 +65,7 @@ export const ForgotPassword = () => {
           />
 
           <Button disabled={isSubmitting} type="submit">
-            {isSubmitting ? "Logging in..." : "Login"}
+            {isSubmitting ? "Submitting..." : "Send Code"}
           </Button>
         </div>
       </form>

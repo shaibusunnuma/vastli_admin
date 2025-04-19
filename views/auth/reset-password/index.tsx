@@ -1,3 +1,4 @@
+"use client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -36,7 +37,7 @@ type Props = {
 
 export default function ResetPassword({ email }: Props) {
   const { signIn } = useAuth();
-  const { isLoading } = useAuth();
+  const router = useRouter();
 
   const form = useForm<FormType>({
     resolver: zodResolver(FormSchema),
@@ -48,23 +49,24 @@ export default function ResetPassword({ email }: Props) {
 
   const onSubmit = async (data: FormType) => {
     try {
-      // if (!email) return;
-      // const { code, password, confirmpassword } = data;
-      // if (password === confirmpassword) {
-      //   const result = await signIn.attemptFirstFactor({
-      //     strategy: "reset_password_email_code",
-      //     code,
-      //     password,
-      //     email,
-      //   });
-      //   if (result?.status === "complete") {
-      //     form.reset();
-      //   } else {
-      //     toast.error("Please use a different password from before");
-      //   }
-      // } else {
-      //   toast.error("Passwords do not match");
-      // }
+      if (!email) return;
+      const { code, password, confirmpassword } = data;
+      if (password === confirmpassword) {
+        const result = await signIn.attemptFirstFactor({
+          strategy: "reset_password_email_code",
+          code,
+          password,
+          email,
+        });
+        if (result?.status === "complete") {
+          form.reset();
+          router.push("/");
+        } else {
+          toast.error("Please use a different password from before");
+        }
+      } else {
+        toast.error("Passwords do not match");
+      }
     } catch (error: any) {
       logger.error(error);
       const msg = error.message || "Error resetting password";
@@ -76,7 +78,7 @@ export default function ResetPassword({ email }: Props) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-md mx-auto py-10">
         <div className="flex flex-col items-center gap-2 text-center">
-          <h1 className="text-2xl font-bold">Create your password</h1>
+          <h1 className="text-2xl font-bold">Reset Password</h1>
           <p className="text-balance text-sm text-muted-foreground">Set a strong password for your account</p>
         </div>
         <div className="grid gap-6">
@@ -87,7 +89,7 @@ export default function ResetPassword({ email }: Props) {
               <FormItem>
                 <FormLabel>Code</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter your code" {...field} />
+                  <Input type="number" placeholder="Enter your code" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -119,9 +121,7 @@ export default function ResetPassword({ email }: Props) {
               </FormItem>
             )}
           />
-          <Button disabled={isSubmitting} type="submit">
-            {isSubmitting ? "Creating..." : "Create Password"}
-          </Button>
+          <Button type="submit">{isSubmitting ? "Creating..." : "Create Password"}</Button>
         </div>
       </form>
     </Form>

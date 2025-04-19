@@ -55,7 +55,6 @@ client.interceptors.response.use(
     isRefreshing = true;
     
     try {
-      // Try to refresh the token
       const { data } = await client.post('refresh-token');
       isRefreshing = false;
       processQueue(null, data.access_token);
@@ -63,7 +62,6 @@ client.interceptors.response.use(
     } catch (refreshError) {
       isRefreshing = false;
       processQueue(refreshError);
-      // If refresh fails, redirect to login
       logger.error('Token refresh failed', refreshError);
       return Promise.reject(refreshError);
     }
@@ -87,7 +85,7 @@ export const authClient = {
     }
   },
 
-  async attemptFirstFactor(params: { email: string; code: string; password?: string }) {
+  async attemptFirstFactor(params: { email: string; code: string; password: string }) {
     try {
       const { data } = await client.post("reset-password", { ...params, deviceInfo });
       return data;
