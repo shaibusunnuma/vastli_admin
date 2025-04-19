@@ -2,7 +2,6 @@ import { AuthUser } from "@/types/auth.types";
 import client from "@/client";
 import ApiErrorHandler from "../error-handler";
 
-
 const userApi = {
 
   async update(user: Partial<AuthUser>) {

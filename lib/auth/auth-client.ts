@@ -16,9 +16,9 @@ const client = axios.create({
 });
 
 let isRefreshing = false;
-let failedQueue: { resolve: (value: unknown) => void; reject: (reason?: any) => void }[] = [];
+let failedQueue: { resolve: (value: unknown) => void; reject: (reason?: unknown) => void }[] = [];
 
-const processQueue = (error: any | null, token: string | null = null) => {
+const processQueue = (error: unknown | null, token: string | null = null) => {
   failedQueue.forEach(promise => {
     if (error) {
       promise.reject(error);

@@ -127,8 +127,8 @@ const TimeIntervalInput = React.forwardRef<HTMLDivElement, TimeIntervalInputProp
     // Validate on blur and potentially correct format
     const handleBlur: React.FocusEventHandler<HTMLInputElement> = (event) => {
         const { name } = event.target;
-        let currentStart = startTime;
-        let currentEnd = endTime;
+        const currentStart = startTime;
+        const currentEnd = endTime;
 
         if (name === 'startTime') {
             if (!isValidTimeFormat(startTime) && startTime) {

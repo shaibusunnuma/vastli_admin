@@ -8,7 +8,7 @@ import { useGetRestaurantsQuery } from "@/lib/services/restaurants/restaurantApi
 import Row from "@/views/restaurants/table-row";
 
 export default function RestaurantsPage() {
-  const { data: restaurants, isLoading } = useGetRestaurantsQuery({});
+  const { data: restaurants } = useGetRestaurantsQuery({});
 
   return (
     <div className="flex flex-col gap-5">

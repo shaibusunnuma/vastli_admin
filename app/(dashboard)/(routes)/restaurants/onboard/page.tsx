@@ -8,7 +8,6 @@ import OnboardingStep from "@/views/restaurants/onboard/onboarding-step";
 import BasicInfo from "@/views/restaurants/onboard/basic-info";
 import OwnerInfo from "@/views/restaurants/onboard/owner-info";
 import RestaurantSettings from "@/views/restaurants/onboard/restaurant-settings";
-import BillingInfo from "@/views/restaurants/onboard/billing-info";
 import InfoReview from "@/views/restaurants/onboard/info-review";
 import { Restaurant, Step } from "@/types/restaurants";
 import { defaultRestaurant } from "@/views/restaurants/onboard/schemas";
