@@ -34,7 +34,7 @@ type Props = {
   email: string;
 };
 
-export default function CreatePassword({ email }: Props) {
+export default function ResetPassword({ email }: Props) {
   const { signIn } = useAuth();
   const { isLoading } = useAuth();
 
@@ -48,23 +48,23 @@ export default function CreatePassword({ email }: Props) {
 
   const onSubmit = async (data: FormType) => {
     try {
-      if (!email) return;
-      const { code, password, confirmpassword } = data;
-      if (password === confirmpassword) {
-        const result = await signIn.attemptFirstFactor({
-          strategy: "reset_password_email_code",
-          code,
-          password,
-          email,
-        });
-        if (result?.status === "complete") {
-          form.reset();
-        } else {
-          toast.error("Please use a different password from before");
-        }
-      } else {
-        toast.error("Passwords do not match");
-      }
+      // if (!email) return;
+      // const { code, password, confirmpassword } = data;
+      // if (password === confirmpassword) {
+      //   const result = await signIn.attemptFirstFactor({
+      //     strategy: "reset_password_email_code",
+      //     code,
+      //     password,
+      //     email,
+      //   });
+      //   if (result?.status === "complete") {
+      //     form.reset();
+      //   } else {
+      //     toast.error("Please use a different password from before");
+      //   }
+      // } else {
+      //   toast.error("Passwords do not match");
+      // }
     } catch (error: any) {
       logger.error(error);
       const msg = error.message || "Error resetting password";
