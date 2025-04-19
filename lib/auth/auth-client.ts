@@ -1,6 +1,5 @@
 import { SignInParams } from "@/types/auth.types";
 import proxyAxios from "@/client/proxy-axios";
-import { SERVER_URL } from "@/constants";
 import ApiErrorHandler from "../error-handler";
 import logger from "@/lib/logger";
 import { getDeviceInfo } from "../device-info";
