@@ -13,7 +13,7 @@ export const customerApiSlice = createApi({
         url: "",
         params: { filter, query },
       }),
-      providesTags: (result, error) => providesList(result?.data, "Customers"),
+      providesTags: (result, _error) => providesList(result?.data, "Customers"),
     }),
 
     getCustomersByFilter: build.query<Customer[], Partial<Customer>>({
@@ -21,7 +21,7 @@ export const customerApiSlice = createApi({
         url: "/filter",
         params: filter,
       }),
-      providesTags: (result, error, filter) => providesList(result, "Customers", JSON.stringify(filter)),
+      providesTags: (result, _error, filter) => providesList(result, "Customers", JSON.stringify(filter)),
     }),
 
     getCustomersStats: build.query<CustomerStats, Partial<Customer>>({
@@ -29,14 +29,14 @@ export const customerApiSlice = createApi({
         url: "/stats",
         params: filter,
       }),
-      providesTags: (result, error, filter) => [{ type: "Customers", id: "STATS" }],
+      providesTags: [{ type: "Customers", id: "STATS" }],
     }),
 
     getCustomerById: build.query<Customer, string>({
       query: (userId) => ({
         url: `/${userId}`,
       }),
-      providesTags: (result, error, userId) => [{ type: "Customers", id: userId }],
+      providesTags: (_result, _error, userId) => [{ type: "Customers", id: userId }],
     }),
 
     addCustomer: build.mutation<Customer, Partial<Customer>>({
@@ -45,7 +45,10 @@ export const customerApiSlice = createApi({
         method: "POST",
         data: newCustomer,
       }),
-      invalidatesTags: (result, error, customer) => [{ type: "Customers", id: "LIST" }],
+      invalidatesTags: (result) => [
+        { type: "Customers", id: "LIST" },
+        { type: "Customers", id: result?.id },
+      ],
     }),
 
     updateCustomer: build.mutation<Customer, Partial<Customer>>({
@@ -54,7 +57,7 @@ export const customerApiSlice = createApi({
         method: "PATCH",
         data: updatedCustomer,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: "Customers", id }],
+      invalidatesTags: (_result, _error, { id }) => [{ type: "Customers", id }],
     }),
 
     deleteCustomer: build.mutation<void, string>({
@@ -62,7 +65,7 @@ export const customerApiSlice = createApi({
         url: `/${userId}`,
         method: "DELETE",
       }),
-      invalidatesTags: (result, error, userId) => [{ type: "Customers", id: userId }],
+      invalidatesTags: (_result, _error, userId) => [{ type: "Customers", id: userId }],
     }),
   }),
 });
