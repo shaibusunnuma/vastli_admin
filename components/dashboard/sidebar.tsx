@@ -18,16 +18,16 @@ const routes = [
     href: "/restaurants",
     color: "text-violet-500",
   },
-  {
-    label: "Customers",
-    icon: Users,
-    href: "/customers",
-  },
-  {
-    label: "Reservations",
-    icon: Calendar,
-    href: "/reservations",
-  },
+  // {
+  //   label: "Customers",
+  //   icon: Users,
+  //   href: "/customers",
+  // },
+  // {
+  //   label: "Reservations",
+  //   icon: Calendar,
+  //   href: "/reservations",
+  // },
   // {
   //   label: "Billing",
   //   icon: CreditCard,
