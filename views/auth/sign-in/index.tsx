@@ -19,11 +19,12 @@ const formSchema = z.object({
 export default function Login() {
   const router = useRouter();
   const { signIn } = useAuth();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
-  const {formState: {isSubmitting}} = form
+  const { formState: { isSubmitting } } = form;
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
@@ -77,7 +78,16 @@ export default function Login() {
             )}
           />
 
-          <Button disabled={isSubmitting} type="submit">{isSubmitting ? "Logging in..." : "Login"}</Button>
+          <div className="flex items-center justify-between">
+            <Button disabled={isSubmitting} type="submit">{isSubmitting ? "Logging in..." : "Login"}</Button>
+            <button
+              type="button"
+              className="text-sm text-muted-foreground hover:underline ml-4"
+              onClick={() => router.push("/forgot-password")}
+            >
+              Forgot password?
+            </button>
+          </div>
         </div>
       </form>
     </Form>
