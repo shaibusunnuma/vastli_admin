@@ -11,8 +11,8 @@ export const getDeviceInfo = (): DeviceInfo => {
 
   let deviceId = typeof window !== 'undefined' ? localStorage.getItem('deviceId') : null;
 
-  if (!deviceId && typeof window !== 'undefined' && window.crypto && window.crypto.randomUUID) {
-    deviceId = `web-${window.crypto.randomUUID()}`
+  if (!deviceId && typeof window !== 'undefined' && crypto && crypto.randomUUID) {
+    deviceId = `${crypto.randomUUID()}`
     localStorage.setItem('deviceId', deviceId);
   } else if (!deviceId) {
     console.warn('crypto.randomUUID not available or localStorage inaccessible. Using fallback ID generation.');

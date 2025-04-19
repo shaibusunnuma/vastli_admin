@@ -16,7 +16,7 @@ const client = axios.create({
 });
 
 export const authClient = {
-  async signIn(params: Omit<SignInParams, 'deviceInfo'>) {
+  async signIn(params: Omit<SignInParams, "deviceInfo">) {
     try {
       const { data } = await client.post("login", { ...params, deviceInfo });
       return data.user;
@@ -52,10 +52,10 @@ export const authClient = {
 
   async refreshToken() {
     try {
-      const { data } = await client.post("refresh-token",);
+      const { data } = await client.post("refresh-token", {}, { headers: { "x-device-id": deviceInfo.deviceId } });
       return data;
     } catch (error) {
-      logger.error('Failed to refresh token', error);
+      logger.error("Failed to refresh token", error);
       throw ApiErrorHandler(error, "Token refresh failed");
     }
   },
@@ -64,7 +64,7 @@ export const authClient = {
     try {
       await client.post(`logout`, {}, { headers: { "x-device-id": deviceInfo.deviceId } });
     } catch (error) {
-      logger.error('Error during logout', error);
+      logger.error("Error during logout", error);
     }
   },
 };
