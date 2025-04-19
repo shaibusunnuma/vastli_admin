@@ -45,7 +45,7 @@ export function authHook() {
   // Sign in function
   const signIn = useMemo(() => {
     return {
-      create: async (params: Omit<SignInParams, 'deviceInfo'>) => {
+      create: async (params: Omit<SignInParams, "deviceInfo">) => {
         setState((prev) => ({ ...prev, isLoading: true }));
         try {
           const user = await authClient.signIn(params);
@@ -58,6 +58,14 @@ export function authHook() {
           return { status: "complete" };
         } catch (error) {
           setState((prev) => ({ ...prev, isLoading: false }));
+          throw error;
+        }
+      },
+
+      prepareFirstFactor: async ({ email }: { email: string }) => {
+        try {
+          await authClient.prepareFirstFactor({ email });
+        } catch (error) {
           throw error;
         }
       },

@@ -79,6 +79,13 @@ export const authClient = {
       throw ApiErrorHandler(error, "Login failed");
     }
   },
+  async prepareFirstFactor(payload: { email: string }) {
+    try {
+      await client.post("forgot-password", payload);
+    } catch (error) {
+      throw ApiErrorHandler(error, "Failed to prepare first factor");
+    }
+  },
 
   async attemptFirstFactor(params: { email: string; code: string; password?: string }) {
     try {
