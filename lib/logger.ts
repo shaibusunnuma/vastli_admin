@@ -9,7 +9,9 @@ function message(message?: any, ...optionalParams: any[]) {
   ENVIRONMENT === "development" && console.log(message, ...optionalParams);
 }
 
-export default {
+const logger = {
   error,
   message,
 };
+
+export default logger;
