@@ -1,5 +1,5 @@
 import { SignInParams } from "@/types/auth.types";
-import axios from "axios";
+import proxyAxios from "@/client/proxy-axios";
 import { SERVER_URL } from "@/constants";
 import ApiErrorHandler from "../error-handler";
 import logger from "@/lib/logger";
@@ -7,18 +7,13 @@ import { getDeviceInfo } from "../device-info";
 
 const deviceInfo = getDeviceInfo();
 
-const client = axios.create({
-  baseURL: `${SERVER_URL}/auth/admin/`,
-  headers: {
-    "Content-Type": "application/json",
-  },
-  withCredentials: true,
-});
+const client = proxyAxios;
+const path = '/auth/admin/'
 
 export const authClient = {
   async signIn(params: Omit<SignInParams, "deviceInfo">) {
     try {
-      const { data } = await client.post("login", { ...params, deviceInfo });
+      const { data } = await client.post(`${path}login`, { ...params, deviceInfo });
       return data.user;
     } catch (error: any) {
       throw ApiErrorHandler(error, "Login failed");
@@ -26,7 +21,7 @@ export const authClient = {
   },
   async prepareFirstFactor(payload: { email: string }) {
     try {
-      await client.post("forgot-password", payload);
+      await client.post(`${path}forgot-password`, payload);
     } catch (error) {
       throw ApiErrorHandler(error, "Failed to prepare first factor");
     }
@@ -34,7 +29,7 @@ export const authClient = {
 
   async attemptFirstFactor(params: { email: string; code: string; password: string }) {
     try {
-      const { data } = await client.post("reset-password", { ...params, deviceInfo });
+      const { data } = await client.post(`${path}reset-password`, { ...params, deviceInfo });
       return data;
     } catch (error: any) {
       throw ApiErrorHandler(error, "Failed to attempt first factor");
@@ -43,7 +38,7 @@ export const authClient = {
 
   async getUser() {
     try {
-      const { data } = await client.get("user");
+      const { data } = await client.get(`${path}user`);
       return data;
     } catch (error) {
       return null;
@@ -52,7 +47,7 @@ export const authClient = {
 
   async refreshToken() {
     try {
-      const { data } = await client.post("refresh-token", {}, { headers: { "x-device-id": deviceInfo.deviceId } });
+      const { data } = await client.post(`${path}refresh-token`, {}, { headers: { "x-device-id": deviceInfo.deviceId } });
       return data;
     } catch (error) {
       logger.error("Failed to refresh token", error);
@@ -62,7 +57,7 @@ export const authClient = {
 
   async signOut() {
     try {
-      await client.post(`logout`, {}, { headers: { "x-device-id": deviceInfo.deviceId } });
+      await client.post(`${path}logout`, {}, { headers: { "x-device-id": deviceInfo.deviceId } });
     } catch (error) {
       logger.error("Error during logout", error);
     }

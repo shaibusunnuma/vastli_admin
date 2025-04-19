@@ -62,7 +62,7 @@ export function middleware(request: NextRequest) {
 
   // If user is authenticated and trying to access an auth-only route (like login)
   if (isAuthenticated && isAuthOnlyPath(pathname)) {
-    const url = new URL('/dashboard', request.url);
+    const url = new URL('/', request.url);
     return NextResponse.redirect(url);
   }
 
