@@ -1,8 +1,9 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DateRange } from "@/types/analytics";
 
 interface DateRangePickerProps {
-  onSelectRange: (range: string) => void;
-  selectedRange: string;
+  onSelectRange: (range: DateRange) => void;
+  selectedRange: DateRange;
 }
 
 export const DateRangePicker: React.FC<DateRangePickerProps> = ({ onSelectRange, selectedRange }) => {
