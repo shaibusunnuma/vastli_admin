@@ -1,168 +1,114 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Store, Users, Calendar, CreditCard, TrendingUp } from "lucide-react";
+'use client';
 
-export default function DashboardPage() {
+import { useState, useEffect } from 'react';
+import { DateRangePicker } from '@/views/analytics/DateRangePicker';
+import { ReservationsChart } from '@/views/analytics/ReservationsChart';
+import { GuestChart } from '@/views/analytics/GuestChart';
+import { TableUtilizationChart } from '@/views/analytics/TableUtilizationChart';
+import { SourceBreakdownChart } from '@/views/analytics/SourceBreakdownChart';
+import { PartySizeChart } from '@/views/analytics/PartySizeChart';
+import { DayOfWeekChart } from '@/views/analytics/DayOfWeekChart';
+import { generateSampleData } from '@/lib/sampleData'; // Adjust the import path as needed
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { KpiCard } from '@/views/analytics/KpiCard';
+
+
+const AnalyticsDashboard = () => {
+  const [dateRange, setDateRange] = useState('last7d');
+  const [sampleData, setSampleData] = useState(generateSampleData(dateRange));
+
+  useEffect(() => {
+    setSampleData(generateSampleData(dateRange));
+  }, [dateRange]);
+
+  // Calculate KPI values based on current sample data
+  const totalReservations = sampleData.sampleReservationsData.reduce((sum, d) => sum + d.total, 0);
+  const totalCovers = sampleData.sampleReservationsData.reduce((sum, d) => sum + d.seated, 0);
+  const averagePartySize = sampleData.samplePartySizeData.reduce((sum, d) => sum + d.value * parseInt(d.name.replace('+', '').split('-')[0]), 0) / sampleData.samplePartySizeData.reduce((sum, d) => sum + d.value, 0) || 0;
+  const totalNoShows = sampleData.sampleReservationsData.reduce((sum, d) => sum + d.noShows, 0);
+  const noShowRate = totalReservations > 0 ? (totalNoShows / totalReservations) * 100 : 0;
+   // Assuming cancellation data is part of sampleReservationsData structure
+  const totalCancelled = sampleData.sampleReservationsData.reduce((sum, d) => sum + d.cancelled, 0);
+  const cancellationRate = totalReservations > 0 ? (totalCancelled / totalReservations) * 100 : 0;
+  // Average turn time is harder to simulate accurately without more complex data, using a placeholder
+  const averageTurnTime = "Approx. 75 min";
+
+
   return (
-    <div className="flex flex-col gap-5">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
-      
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Restaurants
-            </CardTitle>
-            <Store className="h-4 w-4 text-violet-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">128</div>
-            <p className="text-xs text-muted-foreground">
-              +8 from last month
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Active Customers
-            </CardTitle>
-            <Users className="h-4 w-4 text-pink-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">12,546</div>
-            <p className="text-xs text-muted-foreground">
-              +18% from last month
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Reservations Today
-            </CardTitle>
-            <Calendar className="h-4 w-4 text-orange-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">842</div>
-            <p className="text-xs text-muted-foreground">
-              +12% from yesterday
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Revenue This Month
-            </CardTitle>
-            <CreditCard className="h-4 w-4 text-emerald-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">$48,352</div>
-            <p className="text-xs text-muted-foreground">
-              +6% from last month
-            </p>
-          </CardContent>
-        </Card>
+    <div className="flex flex-col gap-6 p-4 md:p-8">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Analytics Dashboard</h1>
+        <DateRangePicker selectedRange={dateRange} onSelectRange={setDateRange} />
       </div>
 
-      <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="reports">Reports</TabsTrigger>
-        </TabsList>
-        <TabsContent value="overview" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-            <Card className="col-span-4">
-              <CardHeader>
-                <CardTitle>Recent Onboarding</CardTitle>
-                <CardDescription>
-                  New restaurants onboarded in the last 30 days
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <div key={i} className="flex items-center">
-                      <div className="mr-4 h-8 w-8 rounded-full bg-violet-100 flex items-center justify-center">
-                        <Store className="h-4 w-4 text-violet-500" />
-                      </div>
-                      <div className="space-y-1">
-                        <p className="text-sm font-medium leading-none">
-                          Restaurant {i}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          Onboarded {i} days ago
-                        </p>
-                      </div>
-                      <div className="ml-auto font-medium">
-                        {i === 1 ? "Today" : i === 2 ? "Yesterday" : `${i} days ago`}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="col-span-3">
-              <CardHeader>
-                <CardTitle>Top Performing Restaurants</CardTitle>
-                <CardDescription>
-                  Based on reservation volume
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <div key={i} className="flex items-center">
-                      <div className="mr-4 h-8 w-8 rounded-full bg-orange-100 flex items-center justify-center">
-                        <TrendingUp className="h-4 w-4 text-orange-500" />
-                      </div>
-                      <div className="space-y-1">
-                        <p className="text-sm font-medium leading-none">
-                          Top Restaurant {i}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {150 - (i * 20)} reservations this week
-                        </p>
-                      </div>
-                      <div className="ml-auto font-medium">
-                        #{i}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-        <TabsContent value="analytics" className="space-y-4">
+      {/* Overview Section */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <KpiCard title="Total Reservations" value={totalReservations} description={`Based on data for ${dateRange}`} />
+        <KpiCard title="Total Covers" value={totalCovers} description={`Based on data for ${dateRange}`} />
+        <KpiCard title="Average Party Size" value={averagePartySize.toFixed(1)} description="Average number of guests per reservation" />
+        <KpiCard title="No-Show Rate" value={`${noShowRate.toFixed(1)}%`} description={`Of total reservations in ${dateRange}`} />
+         <KpiCard title="Cancellation Rate" value={`${cancellationRate.toFixed(1)}%`} description={`Of total reservations in ${dateRange}`} />
+         <KpiCard title="Average Turn Time" value={averageTurnTime} description="Estimated average table turn time" />
+      </div>
+
+      {/* Reservations Deep Dive */}
+      <div className="grid gap-4 md:grid-cols-2">
+         <ReservationsChart data={sampleData.sampleReservationsData} range={dateRange} />
+         <SourceBreakdownChart data={sampleData.sampleReservationSourceData} />
+         <PartySizeChart data={sampleData.samplePartySizeData} />
+         <DayOfWeekChart data={sampleData.sampleDayOfWeekData} />
+      </div>
+
+      {/* Guest Analytics */}
+       <div className="grid gap-4 md:grid-cols-1">
+         <GuestChart data={sampleData.sampleGuestData} />
+         {/* Add more guest analytics charts here, e.g., Repeat Guest Rate */}
           <Card>
             <CardHeader>
-              <CardTitle>Analytics</CardTitle>
-              <CardDescription>
-                Detailed analytics will be displayed here
-              </CardDescription>
+              <CardTitle>Repeat Guest Rate</CardTitle>
             </CardHeader>
             <CardContent>
-              <p>Analytics content will be implemented here</p>
+              {/* Placeholder for Repeat Guest Rate Chart */}
+              <div className="h-[350px] flex items-center justify-center text-muted-foreground">
+                Repeat Guest Rate Chart Placeholder
+              </div>
             </CardContent>
           </Card>
-        </TabsContent>
-        <TabsContent value="reports" className="space-y-4">
+      </div>
+
+      {/* Table & Capacity Management */}
+      <div className="grid gap-4 md:grid-cols-1">
+        <TableUtilizationChart data={sampleData.sampleTableUtilizationData} />
+         {/* Add more table/capacity charts here */}
           <Card>
             <CardHeader>
-              <CardTitle>Reports</CardTitle>
-              <CardDescription>
-                Generate and view reports
-              </CardDescription>
+              <CardTitle>Average Party Size per Table Size</CardTitle>
             </CardHeader>
             <CardContent>
-              <p>Reports content will be implemented here</p>
+               {/* Placeholder for Average Party Size per Table Size Chart */}
+              <div className="h-[350px] flex items-center justify-center text-muted-foreground">
+                Average Party Size per Table Size Chart Placeholder
+              </div>
             </CardContent>
           </Card>
-        </TabsContent>
-      </Tabs>
+      </div>
+
+       {/* Staff Performance (Optional Placeholder) */}
+       <div className="grid gap-4 md:grid-cols-1">
+         <Card>
+           <CardHeader>
+             <CardTitle>Staff Performance (Placeholder)</CardTitle>
+           </CardHeader>
+           <CardContent>
+             <div className="h-[350px] flex items-center justify-center text-muted-foreground">
+               Staff Performance Charts Placeholder
+             </div>
+           </CardContent>
+         </Card>
+       </div>
+
     </div>
   );
-}
+};
+
+export default AnalyticsDashboard;
