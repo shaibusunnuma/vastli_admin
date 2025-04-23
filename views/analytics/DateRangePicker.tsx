@@ -1,5 +1,5 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { DateRange } from "@/types/analytics";
+import { DateRange } from "@/types/analytics.types";
 
 interface DateRangePickerProps {
   onSelectRange: (range: DateRange) => void;

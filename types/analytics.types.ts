@@ -6,3 +6,10 @@ export enum DateRange {
     LAST_MONTH = 'lastMonth',
     THIS_YEAR = 'thisYear'
 }
+
+export interface AnalyticsOverview {
+    totalReservations: number;
+    averagePartySize: number;
+    noShowRate: number;
+    cancellationRate: number;
+  }
