@@ -52,7 +52,7 @@ const AnalyticsDashboard = () => {
         <ReservationsChart dateRange={dateRange} />
         <SourceBreakdownChart data={sampleData.sampleReservationSourceData} />
         <PartySizeChart dateRange={dateRange} />
-        <DayOfWeekChart data={sampleData.sampleDayOfWeekData} />
+        <DayOfWeekChart dateRange={dateRange} />
       </div>
 
       {/* Guest Analytics */}

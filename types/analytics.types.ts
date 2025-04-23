@@ -27,3 +27,8 @@ export interface PartySizeDistribution {
   partySize: number;
   count: number;
 }
+
+export interface WeekdayDistribution {
+  weekday: number;
+  count: number;
+}
