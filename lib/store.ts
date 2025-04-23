@@ -11,8 +11,10 @@ import { serverApiSlice } from "./services/servers/serverApiSlice";
 import { customerSlice } from "./features/customer/customerSlice";
 import { userApiSlice } from "./services/users/userApiSlice";
 import { reviewApiSlice } from "./services/reviews/reviewApiSlice";
+import { analyticsApiSlice } from "./services/analytics/analyticsApiSlice";
 
 const rootReducer = combineSlices(
+  analyticsApiSlice,
   reservationApiSlice,
   restaurantApiSlice,
   restaurantSlice,
@@ -36,6 +38,7 @@ export const makeStore = () => {
         .concat(serverApiSlice.middleware)
         .concat(accountApiSlice.middleware)
         .concat(userApiSlice.middleware)
+        .concat(analyticsApiSlice.middleware)
         .concat(reviewApiSlice.middleware);
     },
   });
