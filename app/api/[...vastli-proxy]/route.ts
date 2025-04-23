@@ -22,28 +22,26 @@ export async function DELETE(req: NextRequest) {
 }
 
 async function proxyRequest(req: NextRequest) {
-  // Extract the path to forward
   const { pathname, search } = req.nextUrl;
   const apiPath = pathname.replace(/^\/api\/vastli-proxy/, "");
   const targetUrl = `${BACKEND_API_URL}${apiPath}${search}`;
 
-  // Prepare the request init
   const headers = new Headers(req.headers);
   // Remove host header to avoid conflicts
   headers.delete("host");
 
-  const fetchInit: RequestInit = {
+  // Include duplex for streaming bodies (required by Node fetch/undici)
+  const fetchInit: RequestInit & { duplex?: 'half' } = {
     method: req.method,
     headers,
-    body: req.method !== "GET" && req.method !== "HEAD" ? await req.text() : undefined,
+    ...(req.method !== "GET" && req.method !== "HEAD" ? { duplex: 'half' as const, body: req.body } : {}),
     credentials: "include",
   };
+
   console.log('targetUrl: ', targetUrl)
 
   // Proxy the request to the backend
   const backendRes = await fetch(targetUrl, fetchInit);
-
-  console.log('response: ', backendRes.status)
 
   // Prepare the response
   const resHeaders = new Headers(backendRes.headers);
