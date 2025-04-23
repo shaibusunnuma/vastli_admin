@@ -9,6 +9,9 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   return proxyRequest(req);
 }
+export async function PATCH(req: NextRequest) {
+  return proxyRequest(req);
+}
 
 export async function PUT(req: NextRequest) {
   return proxyRequest(req);
