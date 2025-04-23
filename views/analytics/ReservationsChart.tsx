@@ -1,13 +1,15 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { useGetReservationsTimeSeriesQuery } from '@/lib/services/analytics/analyticsApiSlice';
+import { DateRange } from '@/types/analytics.types';
 
 interface ReservationsChartProps {
-  data: any[];
-  range: string; // To determine chart type based on range
+  dateRange: DateRange;
 }
 
-export const ReservationsChart: React.FC<ReservationsChartProps> = ({ data, range }) => {
-  const isHourlyOrDaily = range === 'today' || range === 'last7d' || range === 'last30d' || range === 'thisMonth' || range === 'lastMonth';
+export const ReservationsChart: React.FC<ReservationsChartProps> = ({ dateRange }) => {
+  const { data: reservationsData } = useGetReservationsTimeSeriesQuery({ dateRange });
+  const isHourlyOrDaily = dateRange === 'today' || dateRange === 'last7d' || dateRange === 'last30d' || dateRange === 'thisMonth' || dateRange === 'lastMonth';
 
   return (
     <Card>
@@ -17,7 +19,7 @@ export const ReservationsChart: React.FC<ReservationsChartProps> = ({ data, rang
       <CardContent>
         <ResponsiveContainer width="100%" height={350}>
           {isHourlyOrDaily ? (
-            <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+            <LineChart data={reservationsData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis />
@@ -28,7 +30,7 @@ export const ReservationsChart: React.FC<ReservationsChartProps> = ({ data, rang
                <Line type="monotone" dataKey="noShows" stroke="#ff0000" name="No Shows" />
             </LineChart>
           ) : ( // Assuming 'thisYear' for monthly bars
-             <BarChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+             <BarChart data={reservationsData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" />
                 <YAxis />

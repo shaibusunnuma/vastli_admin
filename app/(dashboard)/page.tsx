@@ -49,7 +49,7 @@ const AnalyticsDashboard = () => {
 
       {/* Reservations Deep Dive */}
       <div className="grid gap-4 md:grid-cols-2">
-        <ReservationsChart data={sampleData.sampleReservationsData} range={dateRange} />
+        <ReservationsChart dateRange={dateRange} />
         <SourceBreakdownChart data={sampleData.sampleReservationSourceData} />
         <PartySizeChart data={sampleData.samplePartySizeData} />
         <DayOfWeekChart data={sampleData.sampleDayOfWeekData} />
