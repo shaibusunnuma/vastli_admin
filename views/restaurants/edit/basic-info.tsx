@@ -12,6 +12,10 @@ import { PhoneInput } from "@/components/ui/phone-input";
 import { useUpdateRestaurantMutation } from "@/lib/services/restaurants/restaurantApiSlice";
 import { toast } from "sonner";
 import logger from "@/lib/logger";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { useRef, useState } from "react";
+import { uploadImage } from "@/client/storage-api";
+import { RESTAURANT_LOGO_PATH } from "@/constants";
 
 interface Props {
   restaurant: Partial<Restaurant>;
@@ -19,6 +23,8 @@ interface Props {
 
 function BasicInfo({ restaurant }: Props) {
   const [updateRestaurant] = useUpdateRestaurantMutation();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>();
   const form = useForm<BasicInfoType>({
     resolver: zodResolver(BasicInfoSchema),
     defaultValues: {
@@ -26,8 +32,30 @@ function BasicInfo({ restaurant }: Props) {
     },
   });
   const {
-    formState: { isSubmitting, isDirty }, reset
+    formState: { isSubmitting, isDirty },
+    reset,
   } = form;
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const file = e.target.files?.[0];
+      if (file) {
+        setPreviewUrl(URL.createObjectURL(file));
+        const logoUrl = await uploadImage(file, RESTAURANT_LOGO_PATH);
+        const res = await updateRestaurant({
+          id: restaurant?.id,
+          logoUrl,
+        }).unwrap();
+        reset({
+          ...res,
+        });
+      }
+    } catch (error: any) {
+      logger.error(error);
+      const msg = error.data.message || "Error updating restaurant logo";
+      toast.error(msg);
+    }
+  };
 
   const onSubmit = async (data: BasicInfoType) => {
     try {
@@ -36,7 +64,7 @@ function BasicInfo({ restaurant }: Props) {
         ...data,
       }).unwrap();
       reset({
-        ...res
+        ...res,
       });
     } catch (error: any) {
       logger.error(error);
@@ -54,6 +82,20 @@ function BasicInfo({ restaurant }: Props) {
             <CardDescription>Enter the restaurant's basic details</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            {/* Logo Upload Section */}
+            <div className="flex items-center space-x-4">
+              <Avatar className="h-20 w-20">
+                <AvatarImage src={previewUrl || restaurant.logoUrl} alt={restaurant.name || "logo"} />
+                <AvatarFallback className="font-light">{restaurant.name?.[0]?.toUpperCase()}</AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col">
+                <Button variant="secondary" type="button" onClick={() => fileInputRef.current?.click()}>
+                  {restaurant.logoUrl ? "Update Logo" : "Set Logo"}
+                </Button>
+                <p className="text-xs text-gray-500">Recommended size 1:1, up to 10MB.</p>
+                <input type="file" accept="image/*" ref={fileInputRef} className="hidden" onChange={handleFileChange} />
+              </div>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}

@@ -42,7 +42,7 @@ export default function DetailsCard({ restaurant }: Props) {
     <Card className="border-0">
       <CardHeader className="pb-3 flex flex-row items-center gap-4">
         <Avatar className="h-14 w-14">
-          <AvatarImage src={restaurant.logoUrl || restaurant.imageUrl} alt={restaurant.name} />
+          <AvatarImage src={restaurant.logoUrl} alt={restaurant.name} />
           <AvatarFallback>{restaurant.name?.[0]?.toUpperCase()}</AvatarFallback>
         </Avatar>
         <div className="flex-1">
