@@ -1,5 +1,4 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
 
 interface FilterSelectProps {
   label: string;
@@ -10,11 +9,10 @@ interface FilterSelectProps {
 
 export const FilterSelect: React.FC<FilterSelectProps> = ({ label, options, onSelectFilter, selectedValue }) => {
   return (
-    <div className="grid gap-2">
-      <Label>{label}</Label>
+    <div className="flex flex-row gap-2">
       <Select onValueChange={onSelectFilter} value={selectedValue}>
         <SelectTrigger>
-          <SelectValue placeholder={`Select ${label.toLowerCase()}`} />
+          <SelectValue placeholder={`Select ${label.toLowerCase()}`} className="text-muted-foreground" />
         </SelectTrigger>
         <SelectContent>
           {options.map(option => (

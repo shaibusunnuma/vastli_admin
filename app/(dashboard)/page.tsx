@@ -51,7 +51,7 @@ const AnalyticsDashboard = () => {
       <div className="grid gap-4 md:grid-cols-2">
         <ReservationsChart dateRange={dateRange} />
         <SourceBreakdownChart data={sampleData.sampleReservationSourceData} />
-        <PartySizeChart data={sampleData.samplePartySizeData} />
+        <PartySizeChart dateRange={dateRange} />
         <DayOfWeekChart data={sampleData.sampleDayOfWeekData} />
       </div>
 

@@ -15,10 +15,15 @@ export interface AnalyticsOverview {
 }
 
 export interface DailyReservationStats {
-    date: Date;
-    total: number;
-    seated: number;
-    cancelled: number;
-    noShow: number;
-    completed: number;
-  }
+  date: Date;
+  total: number;
+  seated: number;
+  cancelled: number;
+  noShow: number;
+  completed: number;
+}
+
+export interface PartySizeDistribution {
+  partySize: number;
+  count: number;
+}

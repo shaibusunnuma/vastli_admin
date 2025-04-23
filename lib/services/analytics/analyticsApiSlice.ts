@@ -1,5 +1,5 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { AnalyticsOverview, DailyReservationStats, DateRange } from "@/types/analytics.types";
+import { AnalyticsOverview, DailyReservationStats, DateRange, PartySizeDistribution } from "@/types/analytics.types";
 import { axiosBaseQuery } from "@/lib/baseQuery";
 import { Reservation } from "@/types/reservations";
 
@@ -21,7 +21,11 @@ export const analyticsApiSlice = createApi({
       query: (filter) => ({ url: "/reservations/time-series", params: { ...filter } }),
       providesTags: (result, error, filter) => [{ type: "Analytics", id: filter.dateRange }],
     }),
+    getPartySizeDistribution: build.query<PartySizeDistribution[], ReservationFilter>({
+      query: (filter) => ({ url: "/party-size/distribution", params: { ...filter } }),
+      providesTags: (result, error, filter) => [{ type: "Analytics", id: filter.dateRange }],
+    }),
   }),
 });
 
-export const { useGetAnalyticsOverviewQuery, useGetReservationsTimeSeriesQuery } = analyticsApiSlice;
+export const { useGetAnalyticsOverviewQuery, useGetReservationsTimeSeriesQuery, useGetPartySizeDistributionQuery } = analyticsApiSlice;
