@@ -57,7 +57,9 @@ export function Sidebar() {
             href={route.href}
             className={cn(
               "flex items-center gap-x-2 text-sm font-medium p-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all",
-              pathname === route.href ? "bg-gray-100 dark:bg-gray-800 text-black dark:text-white" : "text-gray-500 dark:text-gray-400"
+              (pathname === route.href || pathname.startsWith(route.href + "/"))
+                ? "bg-gray-100 dark:bg-gray-800 text-black dark:text-white"
+                : "text-gray-500 dark:text-gray-400"
             )}
           >
             <route.icon className="h-5 w-5" />
