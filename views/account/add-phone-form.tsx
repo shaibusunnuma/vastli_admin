@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { adminApi } from "@/lib/auth/admin-api";
 
 const phoneSchema = z.object({
   phone: z.string().min(10, "Please enter a valid phone number"),
@@ -35,9 +36,9 @@ export function AddPhoneForm({ onSuccess, onCancel }: AddPhoneFormProps) {
   const onSubmit = async (data: PhoneFormData) => {
     setIsLoading(true);
     try {
-      // TODO: Implement API call to add phone
-      toast.info("Phone verification coming soon");
-      onSuccess({ phoneNumber: data.phone, verified: false });
+      const result = await adminApi.addPhone(data.phone);
+      toast.success("Verification code sent to your phone");
+      onSuccess(result.phoneNumber);
     } catch (error: any) {
       toast.error(error?.message || "Failed to add phone number");
     } finally {

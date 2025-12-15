@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { adminApi } from "@/lib/auth/admin-api";
 
 const emailSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -35,9 +36,9 @@ export function AddEmailForm({ onSuccess, onCancel }: AddEmailFormProps) {
   const onSubmit = async (data: EmailFormData) => {
     setIsLoading(true);
     try {
-      // TODO: Implement API call to add email
-      toast.info("Email verification coming soon");
-      onSuccess({ emailAddress: data.email, verified: false });
+      const result = await adminApi.addEmail(data.email);
+      toast.success("Verification code sent to your email");
+      onSuccess(result.emailAddress);
     } catch (error: any) {
       toast.error(error?.message || "Failed to add email");
     } finally {

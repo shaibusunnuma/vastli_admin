@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { adminApi } from "@/lib/auth/admin-api";
+import { useUser } from "@/lib/AuthProvider";
 
 const codeSchema = z.object({
   code: z.string().min(6, "Please enter a valid code").max(6, "Code must be 6 digits"),
@@ -22,6 +24,7 @@ interface VerifyPhoneFormProps {
 }
 
 export function VerifyPhoneForm({ phone, onClose }: VerifyPhoneFormProps) {
+  const { user } = useUser();
   const [isLoading, setIsLoading] = useState(false);
   const [isResending, setIsResending] = useState(false);
 
@@ -36,8 +39,9 @@ export function VerifyPhoneForm({ phone, onClose }: VerifyPhoneFormProps) {
   const onSubmit = async (data: CodeFormData) => {
     setIsLoading(true);
     try {
-      // TODO: Implement API call to verify phone
+      await adminApi.verifyPhone(phone.phoneNumber, data.code);
       toast.success("Phone verified successfully");
+      user?.reload();
       onClose();
     } catch (error: any) {
       toast.error(error?.message || "Failed to verify phone");
@@ -49,7 +53,7 @@ export function VerifyPhoneForm({ phone, onClose }: VerifyPhoneFormProps) {
   const resendCode = async () => {
     setIsResending(true);
     try {
-      // TODO: Implement API call to resend verification code
+      await adminApi.sendPhoneVerification(phone.phoneNumber);
       toast.success("Verification code sent");
     } catch (error: any) {
       toast.error(error?.message || "Failed to resend code");
