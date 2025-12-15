@@ -6,10 +6,10 @@ export async function uploadImage(imageFile: File, filePath: string) {
     const formData = new FormData();
     formData.append("file", imageFile);
     formData.append("filePath", filePath);
-    const { data } = await client.post("/storage/upload", formData, {
+    const { data } = await client.post<{ url: string; filePath: string }>("/storage/upload", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-    return data;
+    return data.url;
   } catch (error: any) {
     throw ApiErrorHandler(error, "Error setting profile image");
   }
