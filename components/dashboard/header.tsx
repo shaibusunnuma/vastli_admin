@@ -14,6 +14,7 @@ import { useAuth } from "@/lib/AuthProvider";
 import { Bell, Menu } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { ModeToggle } from "@/components/theme-toggle";
 
 export function Header() {
   const { user, signOut } = useAuth();
@@ -37,6 +38,7 @@ export function Header() {
           <Menu className="h-5 w-5" />
         </Button>
         <div className="flex items-center gap-x-4 ml-auto">
+          <ModeToggle />
           <Button variant="ghost" size="icon" className="relative">
             <Bell className="h-5 w-5" />
             <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full" />
