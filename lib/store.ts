@@ -12,6 +12,7 @@ import { customerSlice } from "./features/customer/customerSlice";
 import { userApiSlice } from "./services/users/userApiSlice";
 import { reviewApiSlice } from "./services/reviews/reviewApiSlice";
 import { analyticsApiSlice } from "./services/analytics/analyticsApiSlice";
+import { settingsAdminApiSlice } from "./services/settings/adminApiSlice";
 
 const rootReducer = combineSlices(
   analyticsApiSlice,
@@ -25,7 +26,8 @@ const rootReducer = combineSlices(
   customerSlice,
   userApiSlice,
   customerApiSlice,
-  reviewApiSlice
+  reviewApiSlice,
+  settingsAdminApiSlice
 );
 export const makeStore = () => {
   return configureStore({
@@ -39,7 +41,8 @@ export const makeStore = () => {
         .concat(accountApiSlice.middleware)
         .concat(userApiSlice.middleware)
         .concat(analyticsApiSlice.middleware)
-        .concat(reviewApiSlice.middleware);
+        .concat(reviewApiSlice.middleware)
+        .concat(settingsAdminApiSlice.middleware);
     },
   });
 };
