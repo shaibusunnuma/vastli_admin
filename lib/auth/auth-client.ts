@@ -70,6 +70,16 @@ export const authClient = {
       logger.error("Error during logout", error);
     }
   },
+
+  async updatePassword(params: { currentPassword: string; newPassword: string }) {
+    try {
+      const deviceInfo = getDeviceInfoLazy();
+      const { data } = await client.post(`${path}update-password`, { ...params, deviceInfo });
+      return data;
+    } catch (error: any) {
+      throw ApiErrorHandler(error, "Failed to update password");
+    }
+  },
 };
 
 export default authClient;

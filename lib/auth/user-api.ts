@@ -6,7 +6,7 @@ const userApi = {
 
   async update(user: Partial<AuthUser>) {
     try {
-      const { data } = await client.patch("/users/update", user);
+      const { data } = await client.patch("/admins/update", user);
       return data;
     } catch (error: any) {
       throw ApiErrorHandler(error, "Error updating user");

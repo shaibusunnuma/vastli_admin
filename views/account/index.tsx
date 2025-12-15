@@ -1,0 +1,12 @@
+export { AccountSidebar } from "./account-sidebar";
+export { UserProfile } from "./user-profile";
+export { UpdateProfileForm } from "./update-profile-form";
+export { EmailAddresses } from "./email-addresses";
+export { AddEmailForm } from "./add-email-form";
+export { VerifyEmailForm } from "./verify-email-form";
+export { PhoneNumbers } from "./phone-numbers";
+export { AddPhoneForm } from "./add-phone-form";
+export { VerifyPhoneForm } from "./verify-phone-form";
+export { PasswordSection } from "./password-section";
+export { UpdatePasswordForm } from "./update-password-form";
+export { AccountSection } from "./account-section";
