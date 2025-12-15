@@ -4,14 +4,22 @@ import ApiErrorHandler from "../error-handler";
 import logger from "@/lib/logger";
 import { getDeviceInfo } from "../device-info";
 
-const deviceInfo = getDeviceInfo();
+// Lazy getter for device info
+let cachedDeviceInfo: ReturnType<typeof getDeviceInfo> | null = null;
+const getDeviceInfoLazy = () => {
+  if (!cachedDeviceInfo) {
+    cachedDeviceInfo = getDeviceInfo();
+  }
+  return cachedDeviceInfo;
+};
 
 const client = proxyAxios;
-const path = '/auth/admin/'
+const path = '/auth/'
 
 export const authClient = {
   async signIn(params: Omit<SignInParams, "deviceInfo">) {
     try {
+      const deviceInfo = getDeviceInfoLazy();
       const { data } = await client.post(`${path}login`, { ...params, deviceInfo });
       return data.user;
     } catch (error: any) {
@@ -28,6 +36,7 @@ export const authClient = {
 
   async attemptFirstFactor(params: { email: string; code: string; password: string }) {
     try {
+      const deviceInfo = getDeviceInfoLazy();
       const { data } = await client.post(`${path}reset-password`, { ...params, deviceInfo });
       return data;
     } catch (error: any) {
@@ -46,7 +55,7 @@ export const authClient = {
 
   async refreshToken() {
     try {
-      const { data } = await client.post(`${path}refresh-token`, {}, { headers: { "x-device-id": deviceInfo.deviceId } });
+      const { data } = await client.post(`${path}refresh-cookie`, {});
       return data;
     } catch (error) {
       logger.error("Failed to refresh token", error);
@@ -56,7 +65,7 @@ export const authClient = {
 
   async signOut() {
     try {
-      await client.post(`${path}logout`, {}, { headers: { "x-device-id": deviceInfo.deviceId } });
+      await client.post(`${path}logout`, {});
     } catch (error) {
       logger.error("Error during logout", error);
     }
