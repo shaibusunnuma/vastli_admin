@@ -35,3 +35,26 @@ export const RoleColors: Record<AdminRole, { bg: string; text: string }> = {
 };
 
 export const AllRoles = Object.values(AdminRole);
+
+// Role hierarchy levels - higher number = more privileges
+export const RoleHierarchy: Record<AdminRole, number> = {
+  [AdminRole.SUPER_ADMIN]: 100,
+  [AdminRole.ADMIN]: 80,
+  [AdminRole.OPS]: 60,
+  [AdminRole.SUPPORT]: 50,
+  [AdminRole.MARKETING]: 40,
+  [AdminRole.VIEWER]: 10,
+};
+
+export function canAssignRole(assignerRole: AdminRole, targetRole: AdminRole): boolean {
+  // Only Super Admin can assign Super Admin
+  if (targetRole === AdminRole.SUPER_ADMIN) {
+    return assignerRole === AdminRole.SUPER_ADMIN;
+  }
+  // Can only assign roles at or below your level
+  return RoleHierarchy[assignerRole] >= RoleHierarchy[targetRole];
+}
+
+export function getAssignableRoles(userRole: AdminRole): AdminRole[] {
+  return AllRoles.filter(role => canAssignRole(userRole, role));
+}

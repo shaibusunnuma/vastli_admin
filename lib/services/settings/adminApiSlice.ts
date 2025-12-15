@@ -54,7 +54,7 @@ export const settingsAdminApiSlice = createApi({
 
     updateAdminRole: build.mutation<Admin, { id: string; role: AdminRole }>({
       query: ({ id, role }) => ({
-        url: `/${id}`,
+        url: `/${id}/role`,
         method: "PATCH",
         data: { role },
       }),
